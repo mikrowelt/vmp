@@ -972,12 +972,6 @@ namespace ros
 	}
 }
 
-	__declspec(noinline) std::string GetApiIdentifier()
-	{
-		return g_entitlementSource;
-	}
-}
-
 void LoadOwnershipEarly()
 {
 	// ConVar_ScriptRestricted because ownership ticket is sensitive information. Should never be exposed to 3rd party
