@@ -31,6 +31,24 @@
 #endif
 
 #include <Error.h>
+#include <string_view>
+
+#ifndef GAME_PATCH_URL
+#define GAME_PATCH_URL "https://cdn.vmp.ir/patches"
+#endif
+
+static std::string GetPatchUrl(const char* originalUrl)
+{
+	static const std::string_view base("https://cdn.vmp.ir/patches/");
+	std::string_view url(originalUrl);
+
+	if (url.length() >= base.length() && url.substr(0, base.length()) == base)
+	{
+		return std::string(GAME_PATCH_URL) + std::string(url.substr(base.length()));
+	}
+
+	return std::string(originalUrl);
+}
 
 #if defined(GTA_FIVE) || defined(IS_RDR3) || defined(GTA_NY)
 struct GameCacheEntry;
@@ -975,7 +993,8 @@ static bool PerformUpdate(const std::vector<GameCacheEntry>& entries)
 					{
 						if (outHash == deltaEntry.fromChecksum)
 						{
-							auto download = CL_QueueDownload(deltaEntry.remoteFile.c_str(), ToNarrow(deltaEntry.GetLocalFileName()).c_str(), deltaEntry.dlSize, compressionAlgo_e::None);
+							std::string deltaRemoteFile = GetPatchUrl(deltaEntry.remoteFile.c_str());
+							auto download = CL_QueueDownload(deltaRemoteFile.c_str(), ToNarrow(deltaEntry.GetLocalFileName()).c_str(), deltaEntry.dlSize, compressionAlgo_e::None);
 							BumpDownloadCount(download, fmt::sprintf("%s_delta_%s", FormatHexString(deltaEntry.toChecksum), FormatHexString(deltaEntry.fromChecksum)));
 
 							notificationEntries.push_back({ deltaEntry.MakeEntry(), false });
@@ -994,7 +1013,8 @@ static bool PerformUpdate(const std::vector<GameCacheEntry>& entries)
 			{
 				// download it from the rockstar service
 				std::string localFileName = (entry.archivedFile) ? ToNarrow(entry.GetRemoteBaseName()) : ToNarrow(entry.GetCacheFileName());
-				const char* remotePath = entry.remotePath;
+				std::string rewrittenRemotePath = GetPatchUrl(entry.remotePath);
+				const char* remotePath = rewrittenRemotePath.c_str();
 
 				if (_strnicmp(remotePath, "http", 4) != 0)
 				{
