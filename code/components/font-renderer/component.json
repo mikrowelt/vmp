@@ -3,8 +3,7 @@
 	"version": "0.1.0",
 	"dependencies": [
 		"fx[2]",
-		"rage:graphics",
-		"stronghold"
+		"rage:graphics"
 	],
 	"provides": []
 }

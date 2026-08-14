@@ -23,7 +23,7 @@ if (!(Test-Path $BuildPath\CitizenMP.sln)) {
 	.\gen.ps1 -Game $Game
 }
 
-Remove-Item env:\platform
+Remove-Item env:\platform -ErrorAction SilentlyContinue
 
 Invoke-Expression "& $PSScriptRoot\..\ci\nuget.exe restore $BuildPath\CitizenMP.sln"
 

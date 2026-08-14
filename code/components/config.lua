@@ -87,7 +87,7 @@ component 'rage-graphics-five'
 component 'rage-scripting-five'
 component 'rage-scripting-rdr3'
 component 'lovely-script'
--- component 'ros-patches-five'
+component 'ros-patches-five'
 component 'ros-patches-rdr3'
 
 component 'gta-net-five'
