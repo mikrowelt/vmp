@@ -35,7 +35,7 @@ static InitFunction httpinitFunction([]()
 		{
 			console::Printf("Server Auth", "Checking license...\n");
 			auto var = instance->GetComponent<console::Context>()->GetVariableManager()->FindEntryRaw("sv_licenseKey");
-			if (!var->GetValue().empty())
+			if (var && !var->GetValue().empty())
 			{
 				auto jsonData = nlohmann::json::object({ { "license", var->GetValue() } });
 				auto tlm = instance->GetComponent<fx::TcpListenManager>();
@@ -73,7 +73,8 @@ static InitFunction httpinitFunction([]()
 			}
 			else
 			{
-				FatalError("Please set sv_licenseKey in server.cfg!");
+				console::Printf("Server Auth", "^3No sv_licenseKey set — running in standalone mode without VMP masterlist registration.^7\n");
+				licenseChecked = true;
 			}
 		}
 	},
