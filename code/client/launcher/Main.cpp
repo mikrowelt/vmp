@@ -404,9 +404,14 @@ int RealMain()
 		tui = UI_InitTen();
 	}
 
-	if (!devMode && wcsstr(GetCommandLineW(), L"-noupdate") != nullptr)
+	if (!devMode)
 	{
-		devMode = true;
+		auto cmdLine = GetCommandLineW();
+
+		if (wcsstr(cmdLine, L"-noupdate") != nullptr || wcsstr(cmdLine, L"-NOUPDATE") != nullptr)
+		{
+			devMode = true;
+		}
 	}
 
 	if (!devMode)
