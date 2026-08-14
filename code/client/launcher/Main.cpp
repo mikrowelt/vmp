@@ -404,6 +404,11 @@ int RealMain()
 		tui = UI_InitTen();
 	}
 
+	if (!devMode && wcsstr(GetCommandLineW(), L"-noupdate") != nullptr)
+	{
+		devMode = true;
+	}
+
 	if (!devMode)
 	{
 		if (!Bootstrap_DoBootstrap())
