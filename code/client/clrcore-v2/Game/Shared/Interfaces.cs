@@ -4,6 +4,8 @@ using INativeValue = CitizenFX.Core.Native.Input.Primitive;
 
 #if IS_RDR3
 namespace CitizenFX.RedM
+#elif IS_FXSERVER
+namespace CitizenFX.Server
 #else
 namespace CitizenFX.FiveM
 #endif

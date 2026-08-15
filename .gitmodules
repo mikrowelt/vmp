@@ -457,3 +457,15 @@
 [submodule "vendor/AntiLag2-SDK"]
 	path = vendor/AntiLag2-SDK
 	url = https://github.com/GPUOpen-LibrariesAndSDKs/AntiLag2-SDK
+[submodule "vendor/libnode/node"]
+	path = vendor/libnode/node
+	url = https://github.com/citizenfx/node.git
+[submodule "vendor/v8/12.4/source"]
+	path = vendor/v8/12.4/source
+	url = https://github.com/v8/v8.git
+[submodule "vendor/libnode/node"]
+	path = vendor/libnode/node
+	url = https://github.com/citizenfx/node.git
+[submodule "vendor/v8/12.4/source"]
+	path = vendor/v8/12.4/source
+	url = https://github.com/v8/v8.git
