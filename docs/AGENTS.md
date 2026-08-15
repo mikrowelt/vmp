@@ -1,6 +1,36 @@
 # VMP Agent Guide
 
+> **Quick reference:** start with the basic-memory notes `[[VMP_QUICKSTART]]` and `[[VMP_INDEX]]` for the fastest entry. This file is the longer project-level guide.
+
 This document helps AI agents and contributors work effectively on the VMP project.
+
+## Quick reference
+
+```bat
+# Client build
+fxd gen -game five
+fxd build -game five -Configuration Release
+
+# Server build
+fxd gen -game server
+fxd build -game server -Configuration Release
+```
+
+Output paths:
+- Client: `code\bin\five\release\`
+- Server: `code\bin\server\windows\release\`
+
+Run client without auto-updates:
+
+```bat
+VMP.exe -noupdate +connect <ip>:30120
+```
+
+Common fixes:
+- `getXState` not found → `code/client/shared/FoxApi.h`
+- `ros::GetApiIdentifier` not found → `code/components/ros-patches-five/include/LegitimacyAPI.h` and `src/LegitimacyChecking.cpp`
+- `v8_monolith.lib` corrupt → delete and re-download from `cdn.vmp.ir/mirrors/vendor/v8/12.4/`
+- Server auth error → omit `sv_licenseKey` for standalone mode
 
 ## Project overview
 
