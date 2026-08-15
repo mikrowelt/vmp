@@ -1,462 +1,459 @@
 [submodule "vendor/jitasm"]
 	path = vendor/jitasm
-	url = https://git.vmp.ir/vmp/jitasm.git
+	url = https://github.com/citizenfx/jitasm.git
 [submodule "vendor/msgpack-c"]
 	path = vendor/msgpack-c
-	url = https://git.vmp.ir/vmp/msgpack-c.git
+	url = https://github.com/msgpack/msgpack-c.git
 	ignore = dirty
 [submodule "vendor/zlib"]
 	path = vendor/zlib
-	url = https://git.vmp.ir/vmp/zlib.git
+	url = https://github.com/madler/zlib.git
 [submodule "vendor/protobuf"]
 	path = vendor/protobuf
-	url = https://git.vmp.ir/vmp/protobuf.git
+	url = https://github.com/google/protobuf.git
 [submodule "vendor/breakpad"]
 	path = vendor/breakpad
-	url = https://git.vmp.ir/vmp/breakpad.git
+	url = https://github.com/citizenfx/breakpad.git
 [submodule "vendor/udis86"]
 	path = vendor/udis86
-	url = https://git.vmp.ir/vmp/udis86.git
+	url = https://github.com/citizenfx/udis86.git
 [submodule "vendor/tinyxml2"]
 	path = vendor/tinyxml2
-	url = https://git.vmp.ir/vmp/tinyxml2.git
+	url = https://github.com/leethomason/tinyxml2.git
 [submodule "vendor/picohttpparser"]
 	path = vendor/picohttpparser
-	url = https://git.vmp.ir/vmp/picohttpparser.git
+	url = https://github.com/h2o/picohttpparser.git
 [submodule "vendor/xz"]
 	path = vendor/xz
-	url = https://git.vmp.ir/vmp/xz.git
+	url = https://github.com/xz-mirror/xz.git
 [submodule "vendor/curl"]
 	path = vendor/curl
-	url = https://git.vmp.ir/vmp/curl.git
+	url = https://github.com/citizenfx/curl.git
 [submodule "vendor/leveldb"]
 	path = vendor/leveldb
-	url = https://git.vmp.ir/vmp/leveldb.git
+	url = https://github.com/citizenfx/leveldb.git
 [submodule "vendor/minhook"]
 	path = vendor/minhook
-	url = https://git.vmp.ir/vmp/minhook.git
+	url = https://github.com/citizenfx/minhook.git
 [submodule "vendor/rapidjson"]
 	path = vendor/rapidjson
-	url = https://git.vmp.ir/vmp/rapidjson.git
+	url = https://github.com/miloyip/rapidjson.git
 [submodule "vendor/fmtlib"]
 	path = vendor/fmtlib
-	url = https://git.vmp.ir/vmp/fmt.git
+	url = https://github.com/fmtlib/fmt.git
 [submodule "vendor/nghttp2"]
 	path = vendor/nghttp2
-	url = https://git.vmp.ir/vmp/nghttp2.git
+	url = https://github.com/nghttp2/nghttp2.git
 [submodule "vendor/cpr"]
 	path = vendor/cpr
-	url = https://git.vmp.ir/vmp/cpr.git
+	url = https://github.com/libcpr/cpr.git
 [submodule "vendor/imgui"]
 	path = vendor/imgui
-	url = https://git.vmp.ir/vmp/imgui.git
+	url = https://github.com/citizenfx/imgui.git
 [submodule "vendor/tbb"]
 	path = vendor/tbb
-	url = https://git.vmp.ir/vmp/oneTBB.git
+	url = https://github.com/citizenfx/oneTBB.git
 [submodule "vendor/discord-rpc"]
 	path = vendor/discord-rpc
-	url = https://git.vmp.ir/vmp/discord-rpc.git
+	url = https://github.com/citizenfx/discord-rpc.git
 [submodule "vendor/lz4"]
 	path = vendor/lz4
-	url = https://git.vmp.ir/vmp/lz4.git
+	url = https://github.com/lz4/lz4.git
 [submodule "vendor/nng"]
 	path = vendor/nng
-	url = https://git.vmp.ir/vmp/nng.git
+	url = https://github.com/nanomsg/nng.git
 [submodule "vendor/node"]
 	path = vendor/node
-	url = https://git.vmp.ir/vmp/node.git
+	url = https://github.com/citizenfx/node.git
 [submodule "vendor/openssl"]
 	path = vendor/openssl
-	url = https://git.vmp.ir/vmp/openssl.git
+	url = https://github.com/openssl/openssl.git
 [submodule "vendor/libopus"]
 	path = vendor/libopus
-	url = https://git.vmp.ir/vmp/opus.git
+	url = https://github.com/xiph/opus.git
 [submodule "vendor/libfvad"]
 	path = vendor/libfvad
-	url = https://git.vmp.ir/vmp/libfvad.git
+	url = https://github.com/dpirch/libfvad.git
 [submodule "vendor/webrtc-audio-processing"]
 	path = vendor/webrtc-audio-processing
-	url = https://git.vmp.ir/vmp/webrtc-audio-processing.git
+	url = https://github.com/citizenfx/webrtc-audio-processing.git
 [submodule "vendor/minizip"]
 	path = vendor/minizip
-	url = https://git.vmp.ir/vmp/minizip.git
+	url = https://github.com/nmoinvaz/minizip.git
 [submodule "vendor/glm"]
 	path = vendor/glm
-	url = https://git.vmp.ir/vmp/glm.git
+	url = https://github.com/citizenfx/glm.git
 [submodule "vendor/eastl"]
 	path = vendor/eastl
-	url = https://git.vmp.ir/vmp/EASTL.git
+	url = https://github.com/citizenfx/EASTL.git
 [submodule "vendor/utfcpp"]
 	path = vendor/utfcpp
-	url = https://git.vmp.ir/vmp/utfcpp.git
+	url = https://github.com/nemtrif/utfcpp.git
 [submodule "vendor/mbedtls"]
 	path = vendor/mbedtls
-	url = https://git.vmp.ir/vmp/mbedtls.git
+	url = https://github.com/ARMmbed/mbedtls.git
 [submodule "vendor/websocketpp"]
 	path = vendor/websocketpp
-	url = https://git.vmp.ir/vmp/websocketpp.git
+	url = https://github.com/citizenfx/websocketpp.git
 [submodule "vendor/replxx"]
 	path = vendor/replxx
-	url = https://git.vmp.ir/vmp/replxx.git
+	url = https://github.com/citizenfx/replxx.git
 [submodule "vendor/thread-pool-cpp"]
 	path = vendor/thread-pool-cpp
-	url = https://git.vmp.ir/vmp/thread-pool-cpp.git
+	url = https://github.com/inkooboo/thread-pool-cpp.git
 [submodule "vendor/ben-demystifier"]
 	path = vendor/ben-demystifier
-	url = https://git.vmp.ir/vmp/Ben.Demystifier.git
+	url = https://github.com/citizenfx/Ben.Demystifier.git
 [submodule "vendor/cpp-url"]
 	path = vendor/cpp-url
-	url = https://git.vmp.ir/vmp/cpp-url.git
+	url = https://github.com/citizenfx/cpp-url.git
 [submodule "vendor/uvw"]
 	path = vendor/uvw
-	url = https://git.vmp.ir/vmp/uvw.git
+	url = https://github.com/citizenfx/uvw.git
 [submodule "vendor/uws"]
 	path = vendor/uws
-	url = https://git.vmp.ir/vmp/uWebSockets.git
+	url = https://github.com/uNetworking/uWebSockets.git
 [submodule "vendor/uSockets"]
 	path = vendor/uSockets
-	url = https://git.vmp.ir/vmp/uSockets.git
+	url = https://github.com/uNetworking/uSockets.git
 [submodule "vendor/toojpeg"]
 	path = vendor/toojpeg
-	url = https://git.vmp.ir/vmp/toojpeg.git
+	url = https://github.com/stbrumme/toojpeg.git
 [submodule "vendor/bgfx"]
 	path = vendor/bgfx
-	url = https://git.vmp.ir/vmp/bgfx.git
+	url = https://github.com/citizenfx/bgfx.git
 [submodule "vendor/bx"]
 	path = vendor/bx
-	url = https://git.vmp.ir/vmp/bx.git
+	url = https://github.com/bkaradzic/bx.git
 [submodule "vendor/bimg"]
 	path = vendor/bimg
-	url = https://git.vmp.ir/vmp/bimg.git
+	url = https://github.com/bkaradzic/bimg.git
 [submodule "vendor/nngpp"]
 	path = vendor/nngpp
-	url = https://git.vmp.ir/vmp/nngpp.git
+	url = https://github.com/citizenfx/nngpp.git
 [submodule "vendor/vulkan-headers"]
 	path = vendor/vulkan-headers
-	url = https://git.vmp.ir/vmp/Vulkan-Headers.git
+	url = https://github.com/KhronosGroup/Vulkan-Headers.git
 [submodule "vendor/labsound"]
 	path = vendor/labsound
-	url = https://git.vmp.ir/vmp/LabSound
+	url = https://github.com/LabSound/LabSound
 [submodule "vendor/libnyquist"]
 	path = vendor/libnyquist
-	url = https://git.vmp.ir/vmp/libnyquist.git
+	url = https://github.com/ddiakopoulos/libnyquist.git
 [submodule "vendor/prometheus-cpp"]
 	path = vendor/prometheus-cpp
-	url = https://git.vmp.ir/vmp/prometheus-cpp.git
+	url = https://github.com/jupp0r/prometheus-cpp.git
 [submodule "vendor/folly"]
 	path = vendor/folly
-	url = https://git.vmp.ir/vmp/folly.git
+	url = https://github.com/facebook/folly.git
 [submodule "ext/native-doc-tooling"]
 	path = ext/native-doc-tooling
-	url = https://git.vmp.ir/vmp/native-doc-tooling
+	url = https://github.com/citizenfx/native-doc-tooling
 [submodule "vendor/concurrentqueue"]
 	path = vendor/concurrentqueue
-	url = https://git.vmp.ir/vmp/concurrentqueue.git
+	url = https://github.com/cameron314/concurrentqueue.git
 [submodule "vendor/xenium"]
 	path = vendor/xenium
-	url = https://git.vmp.ir/vmp/xenium.git
+	url = https://github.com/citizenfx/xenium.git
 [submodule "vendor/rocksdb"]
 	path = vendor/rocksdb
-	url = https://git.vmp.ir/vmp/rocksdb.git
+	url = https://github.com/facebook/rocksdb.git
 [submodule "vendor/lua-cmsgpack"]
 	path = vendor/lua-cmsgpack
-	url = https://git.vmp.ir/vmp/lua-cmsgpack.git
+	url = https://github.com/citizenfx/lua-cmsgpack.git
 	branch = grit
 [submodule "vendor/lua-rapidjson"]
 	path = vendor/lua-rapidjson
-	url = https://git.vmp.ir/vmp/lua-rapidjson.git
+	url = https://github.com/citizenfx/lua-rapidjson.git
 	branch = grit
 [submodule "vendor/lua"]
 	path = vendor/lua
-	url = https://git.vmp.ir/vmp/lua.git
+	url = https://github.com/citizenfx/lua.git
 	branch = luaglm-548
 [submodule "vendor/tinygltf"]
 	path = vendor/tinygltf
-	url = https://git.vmp.ir/vmp/tinygltf.git
+	url = https://github.com/syoyo/tinygltf.git
 [submodule "vendor/lss"]
 	path = vendor/lss
-	url =  https://git.vmp.ir/vmp/linux-syscall-support/
+	url = https://github.com/citizenfx/linux-syscall-support
 [submodule "vendor/range-v3"]
 	path = vendor/range-v3
-	url = https://git.vmp.ir/vmp/range-v3.git
+	url = https://github.com/ericniebler/range-v3.git
 [submodule "vendor/eabase"]
 	path = vendor/eabase
-	url = https://git.vmp.ir/vmp/EABase.git
+	url = https://github.com/citizenfx/EABase.git
 [submodule "vendor/directxtex"]
 	path = vendor/directxtex
-	url = https://git.vmp.ir/vmp/DirectXTex.git
+	url = https://github.com/microsoft/DirectXTex.git
 [submodule "vendor/dspfilters"]
 	path = vendor/dspfilters
-	url = https://git.vmp.ir/vmp/DSPFilters.git
+	url = https://github.com/thorwe/DSPFilters.git
 [submodule "vendor/hdiffpatch"]
 	path = vendor/hdiffpatch
-	url = https://git.vmp.ir/vmp/HDiffPatch.git
+	url = https://github.com/sisong/HDiffPatch.git
 [submodule "vendor/speexdsp"]
 	path = vendor/speexdsp
-	url = https://git.vmp.ir/vmp/speexdsp.git
+	url = https://github.com/xiph/speexdsp.git
 [submodule "vendor/fx11"]
 	path = vendor/fx11
-	url = https://git.vmp.ir/vmp/FX11
+	url = https://github.com/microsoft/FX11
 [submodule "vendor/im3d"]
 	path = vendor/im3d
-	url = https://git.vmp.ir/vmp/im3d.git
+	url = https://github.com/john-chapman/im3d.git
 [submodule "vendor/lmprof"]
 	path = vendor/lmprof
-	url = https://git.vmp.ir/vmp/lmprof.git
+	url = https://github.com/citizenfx/lmprof.git
 	branch = grit-548
 [submodule "vendor/rpmalloc"]
 	path = vendor/rpmalloc
-	url = https://git.vmp.ir/vmp/rpmalloc.git
+	url = https://github.com/citizenfx/rpmalloc.git
 	branch = lua
 [submodule "vendor/wil"]
 	path = vendor/wil
-	url = https://git.vmp.ir/vmp/wil.git
+	url = https://github.com/microsoft/wil.git
 [submodule "vendor/jwt-cpp"]
 	path = vendor/jwt-cpp
-	url = https://git.vmp.ir/vmp/jwt-cpp.git
+	url = https://github.com/Thalhammer/jwt-cpp.git
 [submodule "ext/sdk/resources/sdk-root/fxcode"]
 	path = ext/sdk/resources/sdk-root/fxcode
-	url = https://git.vmp.ir/vmp/fxcode.git
+	url = https://github.com/citizenfx/fxcode.git
 [submodule "vendor/zstd"]
 	path = vendor/zstd
-	url = https://git.vmp.ir/vmp/zstd.git
+	url = https://github.com/facebook/zstd.git
 [submodule "vendor/freetype"]
 	path = vendor/freetype
-	url = https://git.vmp.ir/vmp/freetype.git
+	url = https://github.com/freetype/freetype.git
 [submodule "vendor/nljson"]
 	path = vendor/nljson
-	url = https://git.vmp.ir/vmp/json.git
+	url = https://github.com/nlohmann/json.git
 [submodule "vendor/cpu_features"]
 	path = vendor/cpu_features
-	url = https://git.vmp.ir/vmp/cpu_features.git
+	url = https://github.com/google/cpu_features.git
 [submodule "vendor/rnnoise"]
 	path = vendor/rnnoise
-	url = https://git.vmp.ir/vmp/rnnoise.git
+	url = https://github.com/mumble-voip/rnnoise.git
 [submodule "vendor/msgpack-cpp"]
 	path = vendor/msgpack-cpp
-	url = https://git.vmp.ir/vmp/msgpack-c.git
+	url = https://github.com/msgpack/msgpack-c.git
 [submodule "vendor/boost-submodules/boost-preprocessor"]
 	path = vendor/boost-submodules/boost-preprocessor
-	url = https://git.vmp.ir/vmp/preprocessor.git
+	url = https://github.com/boostorg/preprocessor.git
 [submodule "vendor/boost-submodules/boost-filesystem"]
 	path = vendor/boost-submodules/boost-filesystem
-	url = https://git.vmp.ir/vmp/filesystem
+	url = https://github.com/boostorg/filesystem
 [submodule "vendor/boost-submodules/boost-locale"]
 	path = vendor/boost-submodules/boost-locale
-	url = https://git.vmp.ir/vmp/locale
+	url = https://github.com/boostorg/locale
 [submodule "vendor/boost-submodules/boost-program-options"]
 	path = vendor/boost-submodules/boost-program-options
-	url = https://git.vmp.ir/vmp/program_options
+	url = https://github.com/boostorg/program_options
 [submodule "vendor/boost-submodules/boost-random"]
 	path = vendor/boost-submodules/boost-random
-	url = https://git.vmp.ir/vmp/random
+	url = https://github.com/boostorg/random
 [submodule "vendor/boost-submodules/boost-system"]
 	path = vendor/boost-submodules/boost-system
-	url = https://git.vmp.ir/vmp/system
+	url = https://github.com/boostorg/system
 [submodule "vendor/boost-submodules/boost-context"]
 	path = vendor/boost-submodules/boost-context
-	url = https://git.vmp.ir/vmp/context
+	url = https://github.com/boostorg/context
 [submodule "vendor/boost-submodules/boost-coroutine"]
 	path = vendor/boost-submodules/boost-coroutine
-	url = https://git.vmp.ir/vmp/coroutine
+	url = https://github.com/boostorg/coroutine
 [submodule "vendor/boost-submodules/boost-thread"]
 	path = vendor/boost-submodules/boost-thread
-	url = https://git.vmp.ir/vmp/thread
+	url = https://github.com/boostorg/thread
 [submodule "vendor/boost-submodules/boost-config"]
 	path = vendor/boost-submodules/boost-config
-	url = https://git.vmp.ir/vmp/config
+	url = https://github.com/boostorg/config
 [submodule "vendor/boost-submodules/boost-any"]
 	path = vendor/boost-submodules/boost-any
-	url = https://git.vmp.ir/vmp/any/
+	url = https://github.com/boostorg/any/
 [submodule "vendor/boost-submodules/boost-assert"]
 	path = vendor/boost-submodules/boost-assert
-	url = https://git.vmp.ir/vmp/assert
+	url = https://github.com/boostorg/assert
 [submodule "vendor/boost-submodules/boost-function"]
 	path = vendor/boost-submodules/boost-function
-	url = https://git.vmp.ir/vmp/function
+	url = https://github.com/boostorg/function
 [submodule "vendor/boost-submodules/boost-detail"]
 	path = vendor/boost-submodules/boost-detail
-	url = https://git.vmp.ir/vmp/detail
+	url = https://github.com/boostorg/detail
 [submodule "vendor/boost-submodules/boost-smart-ptr"]
 	path = vendor/boost-submodules/boost-smart-ptr
-	url = https://git.vmp.ir/vmp/smart_ptr/
+	url = https://github.com/boostorg/smart_ptr/
 [submodule "vendor/boost-submodules/boost-static-assert"]
 	path = vendor/boost-submodules/boost-static-assert
-	url = https://git.vmp.ir/vmp/static_assert
+	url = https://github.com/boostorg/static_assert
 [submodule "vendor/boost-submodules/boost-throw-exception"]
 	path = vendor/boost-submodules/boost-throw-exception
-	url = https://git.vmp.ir/vmp/throw_exception
+	url = https://github.com/boostorg/throw_exception
 [submodule "vendor/boost-submodules/boost-type-index"]
 	path = vendor/boost-submodules/boost-type-index
-	url = https://git.vmp.ir/vmp/type_index
+	url = https://github.com/boostorg/type_index
 [submodule "vendor/boost-submodules/boost-type-traits"]
 	path = vendor/boost-submodules/boost-type-traits
-	url = https://git.vmp.ir/vmp/type_traits
+	url = https://github.com/boostorg/type_traits
 [submodule "vendor/boost-submodules/boost-predef"]
 	path = vendor/boost-submodules/boost-predef
-	url = https://git.vmp.ir/vmp/predef
+	url = https://github.com/boostorg/predef
 [submodule "vendor/boost-submodules/boost-core"]
 	path = vendor/boost-submodules/boost-core
-	url = https://git.vmp.ir/vmp/core
+	url = https://github.com/boostorg/core
 [submodule "vendor/boost-submodules/boost-iterator"]
 	path = vendor/boost-submodules/boost-iterator
-	url = https://git.vmp.ir/vmp/iterator
+	url = https://github.com/boostorg/iterator
 [submodule "vendor/boost-submodules/boost-move"]
 	path = vendor/boost-submodules/boost-move
-	url = https://git.vmp.ir/vmp/move
+	url = https://github.com/boostorg/move
 [submodule "vendor/boost-submodules/boost-winapi"]
 	path = vendor/boost-submodules/boost-winapi
-	url = https://git.vmp.ir/vmp/winapi
+	url = https://github.com/boostorg/winapi
 [submodule "vendor/boost-submodules/boost-mpl"]
 	path = vendor/boost-submodules/boost-mpl
-	url = https://git.vmp.ir/vmp/mpl
+	url = https://github.com/boostorg/mpl
 [submodule "vendor/boost-submodules/boost-integer"]
 	path = vendor/boost-submodules/boost-integer
-	url = https://git.vmp.ir/vmp/integer
+	url = https://github.com/boostorg/integer
 [submodule "vendor/boost-submodules/boost-container-hash"]
 	path = vendor/boost-submodules/boost-container-hash
-	url = https://git.vmp.ir/vmp/container_hash
+	url = https://github.com/boostorg/container_hash
 [submodule "vendor/boost-submodules/boost-bind"]
 	path = vendor/boost-submodules/boost-bind
-	url = https://git.vmp.ir/vmp/bind
+	url = https://github.com/boostorg/bind
 [submodule "vendor/boost-submodules/boost-unordered"]
 	path = vendor/boost-submodules/boost-unordered
-	url = https://git.vmp.ir/vmp/unordered
+	url = https://github.com/boostorg/unordered
 [submodule "vendor/boost-submodules/boost-lexical-cast"]
 	path = vendor/boost-submodules/boost-lexical-cast
-	url = https://git.vmp.ir/vmp/lexical_cast
+	url = https://github.com/boostorg/lexical_cast
 [submodule "vendor/boost-submodules/boost-io"]
 	path = vendor/boost-submodules/boost-io
-	url = https://git.vmp.ir/vmp/io
+	url = https://github.com/boostorg/io
 [submodule "vendor/boost-submodules/boost-date-time"]
 	path = vendor/boost-submodules/boost-date-time
-	url = https://git.vmp.ir/vmp/date_time
+	url = https://github.com/boostorg/date_time
 [submodule "vendor/boost-submodules/boost-range"]
 	path = vendor/boost-submodules/boost-range
-	url = https://git.vmp.ir/vmp/range
+	url = https://github.com/boostorg/range
 [submodule "vendor/boost-submodules/boost-tuple"]
 	path = vendor/boost-submodules/boost-tuple
-	url = https://git.vmp.ir/vmp/tuple
+	url = https://github.com/boostorg/tuple
 [submodule "vendor/boost-submodules/boost-concept-check"]
 	path = vendor/boost-submodules/boost-concept-check
-	url = https://git.vmp.ir/vmp/concept_check/
+	url = https://github.com/boostorg/concept_check/
 [submodule "vendor/boost-submodules/boost-utility"]
 	path = vendor/boost-submodules/boost-utility
-	url = https://git.vmp.ir/vmp/utility
+	url = https://github.com/boostorg/utility
 [submodule "vendor/boost-submodules/boost-numeric-conversion"]
 	path = vendor/boost-submodules/boost-numeric-conversion
-	url = https://git.vmp.ir/vmp/numeric_conversion
+	url = https://github.com/boostorg/numeric_conversion
 [submodule "vendor/boost-submodules/boost-chrono"]
 	path = vendor/boost-submodules/boost-chrono
-	url = https://git.vmp.ir/vmp/chrono
+	url = https://github.com/boostorg/chrono
 [submodule "vendor/boost-submodules/boost-array"]
 	path = vendor/boost-submodules/boost-array
-	url = https://git.vmp.ir/vmp/array
+	url = https://github.com/boostorg/array
 [submodule "vendor/boost-submodules/boost-ratio"]
 	path = vendor/boost-submodules/boost-ratio
-	url = https://git.vmp.ir/vmp/ratio
+	url = https://github.com/boostorg/ratio
 [submodule "vendor/boost-submodules/boost-container"]
 	path = vendor/boost-submodules/boost-container
-	url = https://git.vmp.ir/vmp/container
+	url = https://github.com/boostorg/container
 [submodule "vendor/boost-submodules/boost-math"]
 	path = vendor/boost-submodules/boost-math
-	url = https://git.vmp.ir/vmp/math
+	url = https://github.com/boostorg/math
 [submodule "vendor/boost-submodules/boost-property-tree"]
 	path = vendor/boost-submodules/boost-property-tree
-	url = https://git.vmp.ir/vmp/property_tree
+	url = https://github.com/boostorg/property_tree
 [submodule "vendor/boost-submodules/boost-optional"]
 	path = vendor/boost-submodules/boost-optional
-	url = https://git.vmp.ir/vmp/optional
+	url = https://github.com/boostorg/optional
 [submodule "vendor/boost-submodules/boost-fusion"]
 	path = vendor/boost-submodules/boost-fusion
-	url = https://git.vmp.ir/vmp/fusion
+	url = https://github.com/boostorg/fusion
 [submodule "vendor/boost-submodules/boost-function-types"]
 	path = vendor/boost-submodules/boost-function-types
-	url = https://git.vmp.ir/vmp/function_types
+	url = https://github.com/boostorg/function_types
 [submodule "vendor/boost-submodules/boost-circular-buffer"]
 	path = vendor/boost-submodules/boost-circular-buffer
-	url = https://git.vmp.ir/vmp/circular_buffer
+	url = https://github.com/boostorg/circular_buffer
 [submodule "vendor/boost-submodules/boost-bimap"]
 	path = vendor/boost-submodules/boost-bimap
-	url = https://git.vmp.ir/vmp/bimap
+	url = https://github.com/boostorg/bimap
 [submodule "vendor/boost-submodules/boost-algorithm"]
 	path = vendor/boost-submodules/boost-algorithm
-	url = https://git.vmp.ir/vmp/algorithm
+	url = https://github.com/boostorg/algorithm
 [submodule "vendor/boost-submodules/boost-variant"]
 	path = vendor/boost-submodules/boost-variant
-	url = https://git.vmp.ir/vmp/variant
+	url = https://github.com/boostorg/variant
 [submodule "vendor/boost-submodules/boost-serialization"]
 	path = vendor/boost-submodules/boost-serialization
-	url = https://git.vmp.ir/vmp/serialization
+	url = https://github.com/boostorg/serialization
 [submodule "vendor/boost-submodules/boost-exception"]
 	path = vendor/boost-submodules/boost-exception
-	url = https://git.vmp.ir/vmp/exception
+	url = https://github.com/boostorg/exception
 [submodule "vendor/boost-submodules/boost-multi-index"]
 	path = vendor/boost-submodules/boost-multi-index
-	url = https://git.vmp.ir/vmp/multi_index
+	url = https://github.com/boostorg/multi_index
 [submodule "vendor/boost-submodules/boost-foreach"]
 	path = vendor/boost-submodules/boost-foreach
-	url = https://git.vmp.ir/vmp/foreach
+	url = https://github.com/boostorg/foreach
 [submodule "vendor/boost-submodules/boost-uuid"]
 	path = vendor/boost-submodules/boost-uuid
-	url = https://git.vmp.ir/vmp/uuid
+	url = https://github.com/boostorg/uuid
 [submodule "vendor/boost-submodules/boost-regex"]
 	path = vendor/boost-submodules/boost-regex
-	url = https://git.vmp.ir/vmp/regex
+	url = https://github.com/boostorg/regex
 [submodule "vendor/boost-submodules/boost-crc"]
 	path = vendor/boost-submodules/boost-crc
-	url = https://git.vmp.ir/vmp/crc
+	url = https://github.com/boostorg/crc
 [submodule "vendor/boost-submodules/boost-tti"]
 	path = vendor/boost-submodules/boost-tti
-	url = https://git.vmp.ir/vmp/tti
+	url = https://github.com/boostorg/tti
 [submodule "vendor/boost-submodules/boost-outcome"]
 	path = vendor/boost-submodules/boost-outcome
-	url = https://git.vmp.ir/vmp/outcome
+	url = https://github.com/boostorg/outcome
 [submodule "vendor/boost-submodules/boost-asio"]
 	path = vendor/boost-submodules/boost-asio
-	url = https://git.vmp.ir/vmp/asio
+	url = https://github.com/boostorg/asio
 [submodule "vendor/boost-submodules/boost-atomic"]
 	path = vendor/boost-submodules/boost-atomic
-	url = https://git.vmp.ir/vmp/atomic
+	url = https://github.com/boostorg/atomic
 [submodule "vendor/boost-submodules/boost-beast"]
 	path = vendor/boost-submodules/boost-beast
-	url = https://git.vmp.ir/vmp/beast
+	url = https://github.com/boostorg/beast
 [submodule "vendor/boost-submodules/boost-intrusive"]
 	path = vendor/boost-submodules/boost-intrusive
-	url = https://git.vmp.ir/vmp/intrusive
+	url = https://github.com/boostorg/intrusive
 [submodule "vendor/boost-submodules/boost-mp11"]
 	path = vendor/boost-submodules/boost-mp11
-	url = https://git.vmp.ir/vmp/mp11
+	url = https://github.com/boostorg/mp11
 [submodule "vendor/boost-submodules/boost-logic"]
 	path = vendor/boost-submodules/boost-logic
-	url = https://git.vmp.ir/vmp/logic
+	url = https://github.com/boostorg/logic
 [submodule "vendor/boost-submodules/boost-endian"]
 	path = vendor/boost-submodules/boost-endian
-	url = https://git.vmp.ir/vmp/endian
+	url = https://github.com/boostorg/endian
 [submodule "vendor/boost-submodules/boost-iostreams"]
 	path = vendor/boost-submodules/boost-iostreams
-	url = https://git.vmp.ir/vmp/iostreams
+	url = https://github.com/boostorg/iostreams
 [submodule "vendor/boost-submodules/boost-tokenizer"]
 	path = vendor/boost-submodules/boost-tokenizer
-	url = https://git.vmp.ir/vmp/tokenizer
+	url = https://github.com/boostorg/tokenizer
 [submodule "vendor/boost-submodules/boost-scope"]
 	path = vendor/boost-submodules/boost-scope
-	url = https://git.vmp.ir/vmp/scope.git
+	url = https://github.com/boostorg/scope.git
 [submodule "vendor/boost-submodules/boost-describe"]
 	path = vendor/boost-submodules/boost-describe
-	url = https://git.vmp.ir/vmp/describe.git
+	url = https://github.com/boostorg/describe.git
 [submodule "vendor/boost-submodules/boost-align"]
 	path = vendor/boost-submodules/boost-align
-	url = https://git.vmp.ir/vmp/align.git
+	url = https://github.com/boostorg/align.git
 [submodule "vendor/boost-submodules/boost-static-string"]
 	path = vendor/boost-submodules/boost-static-string
-	url = https://git.vmp.ir/vmp/static_string.git
-[submodule "vendor/libnode/node"]
-	path = vendor/libnode/node
-	url = https://git.vmp.ir/vmp/node2.git
+	url = https://github.com/boostorg/static_string.git
 [submodule "vendor/v8/12.4/source"]
 	path = vendor/v8/12.4/source
-	url = https://git.vmp.ir/vmp/v8.git
+	url = https://github.com/v8/v8.git
 [submodule "vendor/AntiLag2-SDK"]
 	path = vendor/AntiLag2-SDK
-	url = https://git.vmp.ir/vmp/AntiLag2-SDK
+	url = https://github.com/GPUOpen-LibrariesAndSDKs/AntiLag2-SDK
