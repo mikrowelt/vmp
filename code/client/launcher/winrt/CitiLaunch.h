@@ -23,11 +23,11 @@ WINRT_EXPORT namespace winrt::CitiLaunch
     {
     }
 }
-namespace std
-{
-#ifndef WINRT_LEAN_AND_MEAN
-    template<> struct hash<winrt::CitiLaunch::IBackdropBrush> : winrt::impl::hash_base {};
-    template<> struct hash<winrt::CitiLaunch::BackdropBrush> : winrt::impl::hash_base {};
-#endif
-}
+// namespace std
+// {
+// #ifndef WINRT_LEAN_AND_MEAN
+//     template<> struct hash<winrt::CitiLaunch::IBackdropBrush> : winrt::impl::hash_base {};
+//     template<> struct hash<winrt::CitiLaunch::BackdropBrush> : winrt::impl::hash_base {};
+// #endif
+// }
 #endif

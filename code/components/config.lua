@@ -32,7 +32,7 @@ if _OPTIONS['game'] == 'server' then
 	component 'vfs-impl-server'
 else
 	component 'citizen-devtools'
-	-- component 'sticky'
+	component 'sticky'
 	component 'steam'
 
 	if _OPTIONS["game"] ~= 'ny' then

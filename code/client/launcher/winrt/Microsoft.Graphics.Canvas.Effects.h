@@ -12,9 +12,9 @@ namespace winrt::impl
 WINRT_EXPORT namespace winrt::Microsoft::Graphics::Canvas::Effects
 {
 }
-namespace std
-{
-#ifndef WINRT_LEAN_AND_MEAN
-#endif
-}
+// namespace std
+// {
+// #ifndef WINRT_LEAN_AND_MEAN
+// #endif
+// }
 #endif
