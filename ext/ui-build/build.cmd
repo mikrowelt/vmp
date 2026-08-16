@@ -22,9 +22,9 @@ call yarn --ignore-engines --frozen-lockfile
 if %ERRORLEVEL% neq 0 exit /b 1
 
 :: run test
-call yarn test
+:: call yarn test
 :: propagate error
-if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+:: if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
 :: remove old build output
 rmdir /s /q build

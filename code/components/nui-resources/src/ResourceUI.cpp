@@ -369,13 +369,13 @@ static InitFunction initFunction([] ()
 });
 
 #include <CefOverlay.h>
-#include <HttpClient.h>
 
-static InitFunction httpInitFunction([]()
-{
-	nui::RequestNUIBlocklist.Connect([](std::function<void(bool, const char*, size_t)> cb)
+	static InitFunction httpInitFunction([]()
 	{
-		auto httpClient = Instance<HttpClient>::Get();
-		httpClient->DoGetRequest("https://runtime.fivem.net/nui-blacklist.json", cb);
+		nui::RequestNUIBlocklist.Connect([](std::function<void(bool, const char*, size_t)> cb)
+		{
+			// Stub: return an empty blacklist so the client does not depend on cfx.re/vmp.ir.
+			static const char emptyBlacklist[] = "[]";
+			cb(true, emptyBlacklist, sizeof(emptyBlacklist) - 1);
+		});
 	});
-});
