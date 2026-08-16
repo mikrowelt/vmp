@@ -34,12 +34,12 @@
 #include <string_view>
 
 #ifndef GAME_PATCH_URL
-#define GAME_PATCH_URL "https://cdn.vmp.ir/patches"
+#define GAME_PATCH_URL "https://content.cfx.re"
 #endif
 
 static std::string GetPatchUrl(const char* originalUrl)
 {
-	static const std::string_view base("https://cdn.vmp.ir/patches/");
+	static const std::string_view base("https://cdn.vmp.ir/");
 	std::string_view url(originalUrl);
 
 	if (url.length() >= base.length() && url.substr(0, base.length()) == base)
