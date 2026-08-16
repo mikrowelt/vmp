@@ -34,7 +34,7 @@
 #include <string_view>
 
 #ifndef GAME_PATCH_URL
-#define GAME_PATCH_URL "https://content.cfx.re"
+#define GAME_PATCH_URL "https://content.cfx.re/"
 #endif
 
 static std::string GetPatchUrl(const char* originalUrl)
