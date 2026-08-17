@@ -42,16 +42,19 @@ namespace WRL = Microsoft::WRL;
 
 bool CanSafelySkipLauncher()
 {
-	FILE* f = _wfopen(MakeRelativeCitPath(L"data\\cache\\launcher_skip_mtl2").c_str(), L"rb");
+	// VMP: the ROS/MTL web flow no longer works with Rockstar's current (2026) launcher
+	// web app, and it is not required: the game loads GTA5.exe in-process and every ROS
+	// endpoint it talks to is stubbed locally by this component. Skip the launcher by
+	// default; set VMP_ENABLE_MTL=1 in the environment to restore the old MTL flow for
+	// debugging.
+	const char* enableMtl = getenv("VMP_ENABLE_MTL");
 
-	if (f)
+	if (enableMtl != nullptr && enableMtl[0] == '1')
 	{
-		fclose(f);
-
-		return true;
+		return false;
 	}
 
-	return false;
+	return true;
 }
 
 void SetCanSafelySkipLauncher(bool value)
@@ -990,7 +993,10 @@ void Component_RunPreInit()
 			}
 
 #ifndef GTA_NY
-			RunLauncher(L"ros:launcher", false);
+			if (!CanSafelySkipLauncher())
+			{
+				RunLauncher(L"ros:launcher", false);
+			}
 #endif
 		}
 

@@ -1411,6 +1411,7 @@ void WaitForLauncher()
 }
 
 extern void SetCanSafelySkipLauncher(bool value);
+extern bool CanSafelySkipLauncher();
 
 extern "C" DLL_EXPORT DWORD WINAPI ROSFailure(LPVOID)
 {
@@ -1592,6 +1593,13 @@ static void SetLauncherWaitCB(HANDLE hEvent, HANDLE hProcessIn, BOOL doBreak, DW
 void RunLauncherAwait()
 {
 	if (g_waitForLauncherCB)
+	{
+		return;
+	}
+
+	// VMP: no launcher subprocess is started when the MTL flow is skipped, so
+	// launcherState->pid would stay 0 forever - do not wait for it.
+	if (CanSafelySkipLauncher())
 	{
 		return;
 	}
