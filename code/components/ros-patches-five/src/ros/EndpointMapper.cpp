@@ -31,7 +31,7 @@ void EndpointMapper::AddGameService(const std::string& serviceName, const TGameS
 
 bool EndpointMapper::HandleRequest(fwRefContainer<net::HttpRequest> request, fwRefContainer<net::HttpResponse> response)
 {
-	console::DPrintf("ros", __FUNCTION__ ": %s %s\n", request->GetRequestMethod().c_str(), request->GetPath().c_str());
+	trace("ros endpoint: %s %s\n", request->GetRequestMethod().c_str(), request->GetPath().c_str());
 
 	for (auto& prefixEntry : m_prefixes)
 	{

@@ -130,6 +130,8 @@ struct MyListener : public IPC::Listener, public IPC::MessageReplyDeserializer
 		{
 			iter.ReadString(&url);
 
+			trace("MTL bridge: NavigateTo %s\n", url.c_str());
+
 			IPC::SyncMessage outMsg(0x7FFFFFFF, ViewHostMsg_CreateIpcChannel, IPC::Message::PRIORITY_NORMAL, new MyListener());
 			initWindowReplyId = IPC::SyncMessage::GetMessageId(outMsg);
 
@@ -147,13 +149,26 @@ struct MyListener : public IPC::Listener, public IPC::MessageReplyDeserializer
 			}
 			else if (js.find(L"READY_TO_ACCEPT") != std::string::npos)
 			{
+				trace("MTL bridge: READY_TO_ACCEPT received, sending ready + requesting title id\n");
+
 				child->SendJSCallback("RGSC_READY_TO_ACCEPT_COMMANDS", "");
 
 				auto child = this->child;
 
 				child->SendJSSync("RGSC_GET_TITLE_ID", "", [child](bool success, const std::string& jd)
 				{
-					json j = json::parse(jd);
+					trace("MTL bridge: RGSC_GET_TITLE_ID reply (success=%d): %s\n", success ? 1 : 0, jd.c_str());
+
+					try
+					{
+						json j = json::parse(jd);
+					}
+					catch (const std::exception& e)
+					{
+						trace("MTL bridge: title id reply JSON parse failed: %s\n", e.what());
+					}
+
+					trace("MTL bridge: sending RGSC_SIGN_IN\n");
 
 					child->SendJSCallback("RGSC_SIGN_IN", HandleCfxLogin());
 				});
