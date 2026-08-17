@@ -959,6 +959,8 @@ std::string HandleCfxLogin()
 	appendJson("Password", "DetCon1");
 	appendJson("Nickname", fmt::sprintf("R%08x", ROS_DUMMY_ACCOUNT_ID).c_str());
 	appendJson("RockstarId", va("%lld", ROS_DUMMY_ACCOUNT_ID));
+	appendJson("Lang", "en-US");
+	appendJson("CountryCode", "CA");
 	appendJson("CallbackData", 2);
 	appendJson("Local", false);
 	appendJson("SignedIn", true);

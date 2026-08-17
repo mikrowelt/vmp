@@ -168,8 +168,11 @@ struct MyListener : public IPC::Listener, public IPC::MessageReplyDeserializer
 						trace("MTL bridge: title id reply JSON parse failed: %s\n", e.what());
 					}
 
-					trace("MTL bridge: sending RGSC_SIGN_IN\n");
+					trace("MTL bridge: sending RGSC_SIGN_IN (legacy + JS_ names)\n");
 
+					// the current (RgscQuery-era) RGL web app only defines window.RGSC_JS_SIGN_IN,
+					// older web apps (offline.pak) only define window.RGSC_SIGN_IN - send both
+					child->SendJSCallback("RGSC_JS_SIGN_IN", HandleCfxLogin());
 					child->SendJSCallback("RGSC_SIGN_IN", HandleCfxLogin());
 				});
 			}
