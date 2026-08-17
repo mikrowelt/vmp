@@ -534,7 +534,7 @@ static BOOL WINAPI GetExitCodeProcessStub(_In_ HANDLE hProcess, _Out_ LPDWORD lp
 
 static BOOL WINAPI ShellExecuteExWStub(_Inout_ SHELLEXECUTEINFOW *pExecInfo)
 {
-	if (pExecInfo->lpFile && wcsstr(pExecInfo->lpFile, L"RockstarService"))
+	if (pExecInfo->lpFile && (wcsstr(pExecInfo->lpFile, L"RockstarService") || wcsstr(pExecInfo->lpFile, L"RockstarSteamHelper")))
 	{
 		// setting SEE_MASK_FLAG_NO_UI bypasses some slow stuff
 		pExecInfo->fMask |= SEE_MASK_FLAG_NO_UI;
