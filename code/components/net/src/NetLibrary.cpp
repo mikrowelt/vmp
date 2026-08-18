@@ -1952,7 +1952,9 @@ concurrency::task<void> NetLibrary::ConnectToServer(const std::string& rootUrl)
 					}
 				}))
 			{
-				// continueRequest();
+				// no auth interceptor is registered in this build (standalone mode),
+				// so continue the request directly (matches upstream behavior)
+				continueRequest();
 			}
 		});
 
