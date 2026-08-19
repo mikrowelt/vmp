@@ -1235,6 +1235,36 @@ static BOOL __stdcall EP_CreateProcessW(const wchar_t* applicationName, wchar_t*
 										BOOL inheritHandles, DWORD creationFlags, void* environment, const wchar_t* currentDirectory, STARTUPINFOW* startupInfo,
 										PROCESS_INFORMATION* information)
 {
+	// VMP: in real-ROS mode (VMP_REAL_ROS=1), do not fake the Rockstar service
+	// stack. Let the real RockstarService.exe / SocialClubHelper.exe /
+	// subprocess.exe run so the SC SDK can complete a genuine local session
+	// handshake against the real Rockstar backend.
+	if (getenv("VMP_REAL_ROS") != nullptr)
+	{
+		bool isRockstarProcess = false;
+
+		if (commandLine && (wcsstr(commandLine, L"subprocess.exe") || StrStrIW(commandLine, L"SocialClubHelper.exe") || wcsstr(commandLine, L"RockstarService.exe")))
+		{
+			isRockstarProcess = true;
+		}
+
+		if (!isRockstarProcess && applicationName)
+		{
+			auto fileName = boost::filesystem::path(applicationName).filename().wstring();
+
+			if (_wcsicmp(fileName.c_str(), L"subprocess.exe") == 0 || _wcsicmp(fileName.c_str(), L"SocialClubHelper.exe") == 0 || _wcsicmp(fileName.c_str(), L"RockstarService.exe") == 0)
+			{
+				isRockstarProcess = true;
+			}
+		}
+
+		if (isRockstarProcess)
+		{
+			trace("EP_CreateProcessW: VMP_REAL_ROS=1, passing through real Rockstar process: %s\n", ToNarrow(applicationName ? applicationName : L"(null)").c_str());
+			return g_oldCreateProcessW(applicationName, commandLine, processAttributes, threadAttributes, inheritHandles, creationFlags, environment, currentDirectory, startupInfo, information);
+		}
+	}
+
 	// Technically unrelated to this file but it already has a CreateProcessW hook: CEF GPU bits
 	bool gpuProcess = false;
 
