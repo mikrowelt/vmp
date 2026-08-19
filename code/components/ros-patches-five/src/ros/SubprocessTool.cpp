@@ -611,6 +611,14 @@ static MyListener* RunListener(const std::wstring& a)
 
 void SubprocessPipe(const std::wstring& s)
 {
+	extern bool CanSafelySkipLauncher();
+	if (CanSafelySkipLauncher())
+	{
+		trace("SubprocessPipe: MTL skipped, not starting MTL bridge listener\n");
+		return;
+	}
+
+	trace("SubprocessPipe: starting MTL bridge listener\n");
 	auto a = s.substr(s.find(L"--rgsc_ipc_channel_name=") + 24);
 	a = a.substr(0, a.find(L" "));
 
