@@ -600,6 +600,16 @@ class RgscLogDelegate : public IRgscDelegate
 		if (event == RgscEvent::SdkInitError)
 		{
 			auto errorCode = *(int*)data;
+
+			// VMP: in real-ROS mode the fabricated sign-in is what the game runs on;
+			// a real SDK init failure is expected (no ROS session) and must not kill
+			// the game.
+			if (getenv("VMP_REAL_ROS") != nullptr)
+			{
+				trace("RgscLogDelegate: VMP_REAL_ROS=1, ignoring SC SDK init error %d\n", errorCode);
+				return nullptr;
+			}
+
 			std::string errorHelp;
 
 			switch (errorCode)
@@ -815,7 +825,19 @@ public:
 
 		std::thread([delegate]()
 		{
-			WaitForSingleObject(g_uiEvent, INFINITE);
+			// VMP: with VMP_REAL_ROS=1 the real SC SDK is not expected to reach the
+			// milestone (event 0xD) that sets g_uiEvent, because no ROS session ever
+			// gets established. Fire the fabricated signed-in state after a short
+			// grace delay instead of waiting forever.
+			if (getenv("VMP_REAL_ROS") != nullptr)
+			{
+				trace("RgscStub::Initialize: VMP_REAL_ROS=1, forcing fabricated sign-in without waiting for SDK milestone\n");
+				Sleep(1000);
+			}
+			else
+			{
+				WaitForSingleObject(g_uiEvent, INFINITE);
+			}
 
 			int zero = 0;
 			delegate->OnEvent((RgscEvent)0xD, &zero);
@@ -957,7 +979,18 @@ IRgsc* GetScSdkStub()
 {
 	LOG_CALL();
 
-	WaitForSingleObject(g_rosClearedEvent, INFINITE);
+	// VMP: with VMP_REAL_ROS=1 the local ROS session bootstrap (ros.dll run())
+	// is not expected to complete, so g_rosClearedEvent may never be signaled.
+	// Do not block the SDK factory on it - the RgscStub below will fabricate the
+	// signed-in state the game actually needs.
+	if (getenv("VMP_REAL_ROS") != nullptr)
+	{
+		trace("GetScSdkStub: VMP_REAL_ROS=1, not waiting for g_rosClearedEvent\n");
+	}
+	else
+	{
+		WaitForSingleObject(g_rosClearedEvent, INFINITE);
+	}
 
 	auto getFunc = (IRgsc*(*)())GetProcAddress(GetModuleHandle(L"socialclub.dll"), MAKEINTRESOURCEA(1));
 	
