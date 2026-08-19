@@ -402,6 +402,22 @@ using networkBail_1604 = void((*)(int, int, int, int, bool));
 
 static bool(*_isScWaitingForInit)();
 
+// VMP: with VMP_REAL_ROS=1, the fabricated SC sign-in never flips the game's
+// "SC waiting for init" state. WaitForRlInit was already made tolerant of this,
+// but the host state machine below would otherwise wedge at HS_LOADED forever
+// (until the game's own SC watchdog kills the process ~2 minutes later).
+static bool IsScWaitingForInit()
+{
+	static const bool vmpRealRos = (getenv("VMP_REAL_ROS") != nullptr);
+
+	if (vmpRealRos)
+	{
+		return false;
+	}
+
+	return _isScWaitingForInit();
+}
+
 #include <HostSystem.h>
 
 #include <ResourceManager.h>
@@ -452,7 +468,7 @@ struct
 
 		if (state == HS_LOADED)
 		{
-			if (_isScWaitingForInit())
+			if (IsScWaitingForInit())
 			{
 				return;
 			}
