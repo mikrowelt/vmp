@@ -77,7 +77,19 @@ static InitFunction initFunction([] ()
 	httpServer->AddRef();
 	httpServer->RegisterHandler(endpointMapper);
 
-	if (wcsstr(GetCommandLine(), L"ros:legit") == nullptr && wcsstr(GetCommandLine(), L"ros:steam") == nullptr && wcsstr(GetCommandLine(), L"ros:epic") == nullptr)
+	// VMP: if VMP_REAL_ROS=1 is set, do NOT register the local loopback ROS stubs.
+	// The game's socialclub.dll will resolve and talk to the real Rockstar ROS
+	// endpoints, so a legitimate signed-in Rockstar/Steam install completes the
+	// entitlement flow for real instead of relying on the (build-3258-incomplete)
+	// local stubs.
+	const bool realRos = getenv("VMP_REAL_ROS") != nullptr;
+
+	if (realRos)
+	{
+		trace("VMP_REAL_ROS set: skipping local ROS loopback stub registration, using real Rockstar endpoints\n");
+	}
+
+	if (!realRos && wcsstr(GetCommandLine(), L"ros:legit") == nullptr && wcsstr(GetCommandLine(), L"ros:steam") == nullptr && wcsstr(GetCommandLine(), L"ros:epic") == nullptr)
 	{
 		auto domains = {
 			"prod.ros.rockstargames.com",
