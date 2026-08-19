@@ -435,7 +435,12 @@ bool ResourceCacheDevice::EnsureFetched(HandleData* handleData)
 		std::string connectionToken;
 		if (Instance<ICoreGameInit>::Get()->GetData("connectionToken", &connectionToken))
 		{
+			trace("ResourceCacheDevice: sending X-CitizenFX-Token header: %s\n", connectionToken.c_str());
 			options.headers["X-CitizenFX-Token"] = connectionToken;
+		}
+		else
+		{
+			trace("ResourceCacheDevice: no connectionToken available, not sending X-CitizenFX-Token header\n");
 		}
 
 		auto entryRef = handleData->entry;

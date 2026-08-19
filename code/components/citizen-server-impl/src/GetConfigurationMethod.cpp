@@ -103,16 +103,21 @@ static InitFunction initFunction([]()
 			auto ra = request->GetRemoteAddress();
 			auto token = request->GetHeader("X-CitizenFX-Token");
 
+			trace("getConfiguration: remote address=%s, token=%s\n", ra.c_str(), token.empty() ? "(empty)" : token.c_str());
+
 			fx::ClientSharedPtr client;
 
 			if (!token.empty())
 			{
 				client = clientRegistry->GetClientByConnectionToken(token);
+				trace("getConfiguration: GetClientByConnectionToken(%s) -> %s\n", token.c_str(), client ? "found" : "not found");
 			}
 
 			if (!client)
 			{
-				client = clientRegistry->GetClientByTcpEndPoint(ra.substr(0, ra.find_last_of(':')));
+				auto endpoint = ra.substr(0, ra.find_last_of(':'));
+				client = clientRegistry->GetClientByTcpEndPoint(endpoint);
+				trace("getConfiguration: GetClientByTcpEndPoint(%s) -> %s\n", endpoint.c_str(), client ? "found" : "not found");
 			}
 
 			auto sendError = [&cb](const char* e)
@@ -132,6 +137,7 @@ static InitFunction initFunction([]()
 
 			if (!client)
 			{
+				trace("getConfiguration: client not found, sending 'Not a valid client.'\n");
 				sendError("Not a valid client.");
 				return;
 			}

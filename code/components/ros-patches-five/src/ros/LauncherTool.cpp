@@ -46,6 +46,7 @@ bool CanSafelySkipLauncher()
 	// web app, and it is not required: the game loads GTA5.exe in-process and every ROS
 	// endpoint it talks to is stubbed locally by this component. Skip the launcher
 	// unconditionally; the old flow is permanently broken.
+	trace("CanSafelySkipLauncher called, returning true (MTL unconditionally skipped)\n");
 	return true;
 }
 
@@ -987,7 +988,12 @@ void Component_RunPreInit()
 #ifndef GTA_NY
 			if (!CanSafelySkipLauncher())
 			{
+				trace("Component_RunPreInit: CanSafelySkipLauncher returned false, calling RunLauncher(ros:launcher)\n");
 				RunLauncher(L"ros:launcher", false);
+			}
+			else
+			{
+				trace("Component_RunPreInit: CanSafelySkipLauncher returned true, skipping ros:launcher\n");
 			}
 #endif
 		}

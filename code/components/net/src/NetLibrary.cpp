@@ -1143,7 +1143,12 @@ concurrency::task<void> NetLibrary::ConnectToServer(const std::string& rootUrl)
 				if (!node["token"].is_null())
 				{
 					m_token = node["token"].get<std::string>();
+					trace("NetLibrary: received connection token from server: %s\n", m_token.c_str());
 					Instance<ICoreGameInit>::Get()->SetData("connectionToken", m_token);
+				}
+				else
+				{
+					trace("NetLibrary: no token in server response\n");
 				}
 
 				if (!node["defer"].is_null())
