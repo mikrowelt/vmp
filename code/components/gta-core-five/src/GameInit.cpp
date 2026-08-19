@@ -165,6 +165,26 @@ void WaitForRlInit()
 {
 	assert(g_isScWaitingForInit);
 
+	// VMP: with VMP_REAL_ROS=1, do not hard-fail after 60s of SC-init waiting.
+	// Service rline for a short bounded period, then continue regardless - either
+	// the game works without a completed SC init, or the next failure tells us
+	// exactly what SC functionality is genuinely required.
+	if (getenv("VMP_REAL_ROS") != nullptr)
+	{
+		trace("WaitForRlInit: VMP_REAL_ROS=1, bounded servicing then continuing regardless\n");
+
+		auto boundedStart = GetTickCount64();
+
+		while (g_isScWaitingForInit() && (GetTickCount64() - boundedStart) < 5000)
+		{
+			RunRlInitServicing();
+			Sleep(50);
+		}
+
+		trace("WaitForRlInit: continuing anyway (scWaitingForInit=%d)\n", g_isScWaitingForInit() ? 1 : 0);
+		return;
+	}
+
 	auto waitForRlInitStart = GetTickCount64();
 
 	while (g_isScWaitingForInit())
