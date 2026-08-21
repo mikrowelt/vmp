@@ -84,6 +84,9 @@ static char JobRunGuard(void* job)
 	if (fn && VirtualQuery(reinterpret_cast<void*>(fn), &mbi, sizeof(mbi)) && mbi.State == MEM_COMMIT &&
 		(mbi.Protect & (PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY)))
 	{
+		// DIAG: log every dispatched job so the fatal one is the last line before a crash
+		trace("JobRunGuard: dispatch job %p fn %p\n", job, reinterpret_cast<void*>(fn));
+
 		return fn(job);
 	}
 
