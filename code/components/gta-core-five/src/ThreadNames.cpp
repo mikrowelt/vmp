@@ -76,6 +76,26 @@ static HookFunction hookFunction([] ()
 
 typedef char (*JobRunFn)(void* job);
 
+static void JobLog(const char* fmt, ...)
+{
+	static FILE* jobLog = nullptr;
+
+	if (!jobLog)
+	{
+		jobLog = fopen("joblog.txt", "a");
+	}
+
+	if (jobLog)
+	{
+		va_list args;
+		va_start(args, fmt);
+		vfprintf(jobLog, fmt, args);
+		va_end(args);
+
+		fflush(jobLog);
+	}
+}
+
 static char JobRunGuard(void* job)
 {
 	JobRunFn fn = *reinterpret_cast<JobRunFn*>(reinterpret_cast<char*>(job) + 0x60);
@@ -85,7 +105,7 @@ static char JobRunGuard(void* job)
 		(mbi.Protect & (PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY)))
 	{
 		// DIAG: log every dispatched job so the fatal one is the last line before a crash
-		trace("JobRunGuard: dispatch job %p fn %p\n", job, reinterpret_cast<void*>(fn));
+		JobLog("dispatch job %p fn %p\n", job, reinterpret_cast<void*>(fn));
 
 		return fn(job);
 	}
@@ -96,7 +116,7 @@ static char JobRunGuard(void* job)
 	uint32_t f6c = *reinterpret_cast<uint32_t*>(reinterpret_cast<char*>(job) + 0x6c);
 	uint8_t f92 = *reinterpret_cast<uint8_t*>(reinterpret_cast<char*>(job) + 0x92);
 
-	trace("JobRunGuard: skipping dependency job %p with invalid fn %p (f50=%p f58=%p f68=%08x f6c=%08x f92=%02x)\n",
+	JobLog("SKIP job %p with invalid fn %p (f50=%p f58=%p f68=%08x f6c=%08x f92=%02x)\n",
 		job, reinterpret_cast<void*>(fn), f50, f58, f68, f6c, f92);
 
 	return 1;
