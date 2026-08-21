@@ -1013,6 +1013,16 @@ FARPROC _stdcall GetProcAddressStub(HMODULE hModule, LPCSTR name)
 {
 	if (name == MAKEINTRESOURCEA(1) && hModule == GetModuleHandle(L"socialclub.dll"))
 	{
+		// VMP: with VMP_REAL_SC=1 the game gets the genuine Rockstar SC SDK
+		// factory - no RgscStub, no fabricated sign-in. Use on machines with a
+		// real signed-in Rockstar Games Launcher session.
+		if (getenv("VMP_REAL_SC") != nullptr)
+		{
+			trace("GetProcAddressStub: VMP_REAL_SC=1, passing through real SC SDK factory\n");
+
+			return GetProcAddress(hModule, name);
+		}
+
 		return (FARPROC)GetScSdkStub;
 	}
 
