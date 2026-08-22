@@ -601,37 +601,12 @@ class RgscLogDelegate : public IRgscDelegate
 		{
 			auto errorCode = *(int*)data;
 
-			// VMP: in real-ROS mode the fabricated sign-in is what the game runs on;
-			// a real SDK init failure is expected (no ROS session) and must not kill
-			// the game.
-			if (getenv("VMP_REAL_ROS") != nullptr)
-			{
-				trace("RgscLogDelegate: VMP_REAL_ROS=1, ignoring SC SDK init error %d\n", errorCode);
-				return nullptr;
-			}
-
-			std::string errorHelp;
-
-			switch (errorCode)
-			{
-			case 1014:
-				errorHelp = "Failed to initialize renderer subprocess.\n";
-				break;
-			case 1024:
-				errorHelp = "Failed to validate DLL versions.\n";
-				break;
-			case 1002:
-				errorHelp = "Failed to initialize file system.\n";
-				break;
-			case 1008:
-				errorHelp = "Failed to initialize gamer pic manager.\n";
-				break;
-			case 1005:
-				errorHelp = "Failed to initialize metadata. Please verify your game files before trying anything else.\n";
-				break;
-			}
-
-			FatalError("R* SC SDK failed to initialize. Error code: %d\n%s\nPlease click 'Save information' below and upload the saved .zip file when asking for help!", errorCode, errorHelp);
+			// the real SC SDK is not expected to initialize (no Rockstar ROS
+			// session exists); the fabricated sign-in fired from
+			// RgscStub::Initialize is what the game runs on, so a real SDK init
+			// failure must not kill the game
+			trace("RgscLogDelegate: ignoring SC SDK init error %d (no real ROS session)\n", errorCode);
+			return nullptr;
 		}
 
 		if (event == RgscEvent::FriendStatusChanged)
@@ -825,19 +800,11 @@ public:
 
 		std::thread([delegate]()
 		{
-			// VMP: with VMP_REAL_ROS=1 the real SC SDK is not expected to reach the
-			// milestone (event 0xD) that sets g_uiEvent, because no ROS session ever
-			// gets established. Fire the fabricated signed-in state after a short
-			// grace delay instead of waiting forever.
-			if (getenv("VMP_REAL_ROS") != nullptr)
-			{
-				trace("RgscStub::Initialize: VMP_REAL_ROS=1, forcing fabricated sign-in without waiting for SDK milestone\n");
-				Sleep(1000);
-			}
-			else
-			{
-				WaitForSingleObject(g_uiEvent, INFINITE);
-			}
+			// the real SC SDK is never expected to reach the milestone (event 0xD)
+			// that sets g_uiEvent, because no Rockstar ROS session exists. Fire the
+			// fabricated signed-in state after a short grace delay instead of
+			// waiting forever.
+			Sleep(1000);
 
 			int zero = 0;
 			delegate->OnEvent((RgscEvent)0xD, &zero);
