@@ -1028,16 +1028,22 @@ static HookFunction hookFunction([] ()
 
 		trace("legitimacy: forced SC session-alive check at %p\n", scCheck);
 
-		// SC capability query (calls a getter on the SC manager global and a
-		// virtual on the result) - the sub-object is null with a fabricated
-		// session and the game dereferences it (GTA5_b3570.exe+5E2D37).
-		// Skip the deref and answer "unavailable" (return false) instead.
-		// E8.. 48 8B C8 48 8B 00 FF 52 08 84 C0 74 04 B0 01 EB 02 32 C0 48 83 C4 28 C3
-		auto scCap = hook::get_pattern("E8 ? ? ? ? 48 8B C8 48 8B 10 FF 52 08 84 C0 74 04 B0 01 EB 02 32 C0 48 83 C4 28 C3");
+		// gta-core-five MinHooks IsScSignedIn (FF 52 08 84 C0 74 04 B0 01 EB at
+		// -0x26) to ReturnTrue, but its own GetDummyScProfile calls the ORIGINAL
+		// via the trampoline - and the original body dereferences a null SC
+		// manager sub-object when no real session exists (GTA5_b3570.exe+5E2D37,
+		// enemy-five-high). Make the original body safely return false WITHOUT
+		// touching the bytes gta-core-five pattern-scans (patch ends before the
+		// FF 52 08 site).
+		// E8..(call getter) 48 8B C8 (mov rcx,rax) 48 8B 10 (mov rdx,[rax]) ...
+		auto scCap = hook::get_pattern("E8 ? ? ? ? 48 8B C8 48 8B 10 FF 52 08");
 
-		hook::put<uint8_t>((uintptr_t)scCap + 5, 0xEB); // jmp +0x0F -> xor al,al
-		hook::put<uint8_t>((uintptr_t)scCap + 6, 0x0F);
-		hook::nop((uintptr_t)scCap + 7, 15);
+		// xor eax,eax; jmp +0x14 (-> xor al,al; add rsp,28; ret); nop fill
+		hook::put<uint8_t>(scCap, 0x31);
+		hook::put<uint8_t>((uintptr_t)scCap + 1, 0xC0);
+		hook::put<uint8_t>((uintptr_t)scCap + 2, 0xEB);
+		hook::put<uint8_t>((uintptr_t)scCap + 3, 0x14);
+		hook::nop((uintptr_t)scCap + 4, 7);
 
 		trace("legitimacy: stubbed SC capability query at %p\n", scCap);
 	}
