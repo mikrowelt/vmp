@@ -22,7 +22,14 @@ param(
 	[string]$Args = ''
 )
 
-$VSVersion = [System.Version]::Parse((& "$PSScriptRoot\..\ci\vswhere.exe" -prerelease -latest -property catalog_buildVersion -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64))
+$vswhereVersion = (& "$PSScriptRoot\..\ci\vswhere.exe" -prerelease -latest -property catalog_buildVersion -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64)
+if ([string]::IsNullOrWhiteSpace($vswhereVersion)) {
+	# vswhere finds no instances (e.g. broken installer cache); fall back to detecting the VS2022 toolchain on disk
+	if (Test-Path "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat") {
+		$vswhereVersion = "17.0"
+	}
+}
+$VSVersion = [System.Version]::Parse($vswhereVersion)
 if ($VSVersion -ge [System.Version]::Parse("17.0")) {
 	$VSLine = "vs2022"
 } elseif ($VSVersion -ge [System.Version]::Parse("16.0")) {
