@@ -77,9 +77,17 @@ static InitFunction initFunction([] ()
 	httpServer->AddRef();
 	httpServer->RegisterHandler(endpointMapper);
 
-	// local loopback ROS stubs are always registered; no real-ROS passthrough
-	// mode exists in this build (ownership is verified locally).
-	if (wcsstr(GetCommandLine(), L"ros:legit") == nullptr && wcsstr(GetCommandLine(), L"ros:steam") == nullptr && wcsstr(GetCommandLine(), L"ros:epic") == nullptr)
+	// VMP_REAL_ROS=1: do NOT register the local loopback ROS stubs; the game's
+	// socialclub.dll talks to the real Rockstar ROS endpoints (used with a
+	// legitimate signed-in Rockstar Games Launcher install).
+	const bool realRos = getenv("VMP_REAL_ROS") != nullptr;
+
+	if (realRos)
+	{
+		trace("VMP_REAL_ROS set: skipping local ROS loopback stub registration, using real Rockstar endpoints\n");
+	}
+
+	if (!realRos && wcsstr(GetCommandLine(), L"ros:legit") == nullptr && wcsstr(GetCommandLine(), L"ros:steam") == nullptr && wcsstr(GetCommandLine(), L"ros:epic") == nullptr)
 	{
 		auto domains = {
 			"prod.ros.rockstargames.com",
