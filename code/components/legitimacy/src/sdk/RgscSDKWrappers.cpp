@@ -1027,5 +1027,18 @@ static HookFunction hookFunction([] ()
 		hook::put<uint8_t>((uintptr_t)scCheck + 2, 0xC3); // ret
 
 		trace("legitimacy: forced SC session-alive check at %p\n", scCheck);
+
+		// SC capability query (calls a getter on the SC manager global and a
+		// virtual on the result) - the sub-object is null with a fabricated
+		// session and the game dereferences it (GTA5_b3570.exe+5E2D37).
+		// Skip the deref and answer "unavailable" (return false) instead.
+		// E8.. 48 8B C8 48 8B 00 FF 52 08 84 C0 74 04 B0 01 EB 02 32 C0 48 83 C4 28 C3
+		auto scCap = hook::get_pattern("E8 ? ? ? ? 48 8B C8 48 8B 00 FF 52 08 84 C0 74 04 B0 01 EB 02 32 C0 48 83 C4 28 C3");
+
+		hook::put<uint8_t>((uintptr_t)scCap + 5, 0xEB); // jmp +0x0F -> xor al,al
+		hook::put<uint8_t>((uintptr_t)scCap + 6, 0x0F);
+		hook::nop((uintptr_t)scCap + 7, 15);
+
+		trace("legitimacy: stubbed SC capability query at %p\n", scCap);
 	}
 });
