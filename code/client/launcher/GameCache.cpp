@@ -348,7 +348,10 @@ static std::vector<GameCacheEntry> g_requiredEntries =
 #endif
 
 #if defined(_M_AMD64)
-	{ "ros_2090/socialclub.dll", "AE14687363C0FB5A8B086B4EB24D5A6E2D5161B9", "https://content.cfx.re/mirrors/ros/2.0.9.0/socialclub.dll", 5287320 },
+	// VMP: use the current RGL Social Club (2.4.0.216) - the 2021-era 2.0.9.0 is
+	// rejected by newer game builds (MO_SC_ERR_OLD_VERSION). The file ships with
+	// the Rockstar Games Launcher install.
+	{ "ros_2090/socialclub.dll", "6D0A7E4A3FE55F4C058A2D11C1A88D98E704D032", "https://content.cfx.re/mirrors/ros/2.0.9.0/socialclub.dll", 4824184 },
 	{ "ros_2090/socialclub.pak", "D70F269F7EBBA3A13AA2871BAFA58212B01E6280", "https://content.cfx.re/mirrors/ros/2.0.9.0/socialclub.pak", 4996 },
 
 	// RDR3 expects these to exist for SC SDK init to succeed
