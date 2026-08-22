@@ -1001,7 +1001,7 @@ FARPROC _stdcall GetProcAddressStub(HMODULE hModule, LPCSTR name)
 static HookFunction hookFunction([] ()
 {
 	trace("legitimacy: installing GetProcAddress IAT hook (exe base=%p, baseDiff=%p)\n",
-		GetModuleHandle(nullptr), (void*)hook::baseAddressDifference);
+		(void*)GetModuleHandle(nullptr), (void*)hook::baseAddressDifference);
 
 	auto origGpa = hook::iat("kernel32.dll", GetProcAddressStub, "GetProcAddress");
 
