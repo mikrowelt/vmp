@@ -1387,6 +1387,56 @@ static void WINAPI ExitProcessReplacement(UINT exitCode)
 
 static void(*_origLoadMeta)(const char*, bool, uint32_t);
 
+// VMP: on the real-SDK arm (VMP_REAL_SC=1) the SC session object
+// ([SCmanager+0x60]) is only created once the SDK finishes init (~40s on a
+// slow box). LoadMeta dereferences it unconditionally (GTA5_b3570.exe+AA3AAF,
+// floor-nitrogen-spring), so wait for it here.
+static void WaitForRealScSession()
+{
+	static bool s_realSc = getenv("VMP_REAL_SC") != nullptr;
+
+	if (!s_realSc)
+	{
+		return;
+	}
+
+	static bool s_done = false;
+
+	if (s_done)
+	{
+		return;
+	}
+
+	s_done = true;
+
+	wchar_t exePath[MAX_PATH];
+	GetModuleFileNameW(nullptr, exePath, MAX_PATH);
+
+	if (wcsstr(exePath, L"_b3570_") == nullptr)
+	{
+		return;
+	}
+
+	// lea rbx,[scManager]; mov rcx,rbx; call ...; test al,al; je ...
+	auto site = hook::get_pattern("48 8D 1D ? ? ? ? 48 8B CB E8 ? ? ? ? 84 C0 74 55");
+	auto mgr = (char*)hook::get_address<void*>(site, 3, 7);
+
+	auto start = GetTickCount64();
+
+	while (*(void**)(mgr + 0x60) == nullptr)
+	{
+		if ((GetTickCount64() - start) > 120000)
+		{
+			trace("gta:net: timed out waiting for real SC session object, continuing anyway\n");
+			break;
+		}
+
+		Sleep(250);
+	}
+
+	trace("gta:net: real SC session object: %p (waited %ums)\n", *(void**)(mgr + 0x60), (uint32_t)(GetTickCount64() - start));
+}
+
 // VMP: with a fabricated SC session the game skips rline init entirely,
 // leaving the rline service manager struct (size 0x800) zeroed; the load-meta
 // path then dereferences it (GTA5_b3570.exe+AA3AAF, floor-nitrogen-spring).
@@ -1434,6 +1484,8 @@ static void EnsureRlineManagerInit()
 
 static void WaitForScAndLoadMeta(const char* fn, bool a2, uint32_t a3)
 {
+	WaitForRealScSession();
+
 	EnsureRlineManagerInit();
 
 	WaitForRlInit();
