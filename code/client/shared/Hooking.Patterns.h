@@ -143,6 +143,14 @@ namespace hook
 			if (m_matches.size() != expected)
 			{
 				trace("hook::pattern count mismatch: expected %u, got %zu: %s\n", expected, m_matches.size(), m_orig.c_str());
+
+				// VMP diag: assert below kills the process before the log
+				// thread flushes - write synchronously
+				if (FILE* f = fopen("C:\\vmp26\\pattern-fail.txt", "ab"))
+				{
+					fprintf(f, "expected %u, got %zu: %s\n", expected, m_matches.size(), m_orig.c_str());
+					fclose(f);
+				}
 			}
 			assert(m_matches.size() == expected);
 			return std::move(*this);
