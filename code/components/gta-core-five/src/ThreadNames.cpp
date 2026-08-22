@@ -76,14 +76,16 @@ static HookFunction hookFunction([] ()
 
 typedef char (*JobRunFn)(void* job);
 
+static FILE* g_jobLog;
+
 static void JobLog(const char* fmt, ...)
 {
-	static FILE* jobLog = nullptr;
-
-	if (!jobLog)
-	{
-		jobLog = fopen("joblog.txt", "a");
-	}
+	// NOTE: the log file is opened eagerly from the main thread (see the hook
+	// below). It must NOT be opened lazily here: this runs on RAGE dependency
+	// worker threads whose stacks are not 16-byte aligned, and the
+	// fopen->CreateFileW->NtCreateFile hook path crashes in SSE-vectorized
+	// std::wstring::find (movaps on a misaligned stack).
+	FILE* jobLog = g_jobLog;
 
 	if (jobLog)
 	{
@@ -124,19 +126,28 @@ static char JobRunGuard(void* job)
 
 static HookFunction hookFunctionJobGuard([] ()
 {
+	// open the job log eagerly on the main thread (aligned stack) - see JobLog
+	g_jobLog = fopen("joblog.txt", "a");
+
 	// mov rcx, rdi; call qword [rdi+60h]; test al, al; je <requeue>; xor edi, edi; lea rbx, [rbp]
 	char* location = hook::pattern("48 8B CF FF 57 60 84 C0 74 43 33 FF 48 8D 5D 00").count(1).get(0).get<char>();
 
-	// trampoline: mov rcx, rdi; mov rax, JobRunGuard; jmp rax
-	char* stub = static_cast<char*>(hook::AllocateStubMemory(32));
+	// trampoline: mov rcx, rdi; mov rax, JobRunGuard; call rax; mov rax, <ret>; jmp rax
+	// (call, not jmp: the callee must run with the same stack alignment the
+	// original `call qword [rdi+60h]` would have produced, otherwise any
+	// SSE-vectorized CRT code below the guard faults on movaps)
+	char* stub = static_cast<char*>(hook::AllocateStubMemory(48));
 
 	DWORD oldProtect;
-	VirtualProtect(stub, 32, PAGE_EXECUTE_READWRITE, &oldProtect);
+	VirtualProtect(stub, 48, PAGE_EXECUTE_READWRITE, &oldProtect);
 
 	stub[0] = 0x48; stub[1] = 0x89; stub[2] = 0xF9; // mov rcx, rdi
 	stub[3] = 0x48; stub[4] = 0xB8;                 // mov rax, imm64
 	*reinterpret_cast<void**>(stub + 5) = reinterpret_cast<void*>(&JobRunGuard);
-	stub[13] = 0xFF; stub[14] = 0xE0;               // jmp rax
+	stub[13] = 0xFF; stub[14] = 0xD0;               // call rax
+	stub[15] = 0x48; stub[16] = 0xB8;               // mov rax, imm64
+	*reinterpret_cast<void**>(stub + 17) = reinterpret_cast<void*>(location + 6);
+	stub[25] = 0xFF; stub[26] = 0xE0;               // jmp rax
 
 	// jump to the stub over the 6 original bytes (48 8B CF FF 57 60)
 	hook::nop(location, 6);
