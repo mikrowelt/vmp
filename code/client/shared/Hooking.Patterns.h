@@ -44,6 +44,10 @@ namespace hook
 		std::string m_bytes;
 		std::string m_mask;
 
+		// VMP diag: keep the original pattern string so count mismatches can
+		// name the failing pattern before asserting
+		std::string m_orig;
+
 #if PATTERNS_USE_HINTS
 		uint64_t m_hash;
 		bool m_useHinting;
@@ -91,24 +95,31 @@ namespace hook
 		pattern(const char(&p)[Len])
 			: pattern(getRVA<void>(0), true)
 		{
+			m_orig.assign(p, Len - 1);
 			Initialize(p, Len);
 		}
 
 		pattern(const char* mem_pattern)
 			: pattern(getRVA<void>(0), true)
 		{
+			m_orig.assign(mem_pattern);
 			Initialize(mem_pattern, strlen(mem_pattern));
 		}
 
 		pattern(std::string_view p)
 			: pattern(getRVA<void>(0), true)
 		{
+			m_orig.assign(p.data(), p.size());
 			Initialize(p.data(), p.size());
 		}
 
 		inline pattern& count(uint32_t expected) &
 		{
 			EnsureMatches(expected);
+			if (m_matches.size() != expected)
+			{
+				trace("hook::pattern count mismatch: expected %u, got %zu: %s\n", expected, m_matches.size(), m_orig.c_str());
+			}
 			assert(m_matches.size() == expected);
 			return *this;
 		}
@@ -129,6 +140,10 @@ namespace hook
 		inline pattern&& count(uint32_t expected) &&
 		{
 			EnsureMatches(expected);
+			if (m_matches.size() != expected)
+			{
+				trace("hook::pattern count mismatch: expected %u, got %zu: %s\n", expected, m_matches.size(), m_orig.c_str());
+			}
 			assert(m_matches.size() == expected);
 			return std::move(*this);
 		}
