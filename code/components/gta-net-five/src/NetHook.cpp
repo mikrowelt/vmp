@@ -402,14 +402,16 @@ using networkBail_1604 = void((*)(int, int, int, int, bool));
 
 static bool(*_isScWaitingForInit)();
 
-// VMP: with a fabricated SC session (legitimacy component, VMP_REAL_ROS) the
+// VMP: with a fabricated SC session (stub SDK arm - VMP_REAL_SC not set) the
 // game's SC-waiting flag never clears, which would wedge the host state
 // machine at HS_LOADED forever. Report not-waiting in that configuration.
+// With the real SDK (VMP_REAL_SC=1) wait properly - the load path needs the
+// real session object that only exists after SDK init completes.
 static bool IsScWaitingForInit()
 {
-	static bool s_realRos = getenv("VMP_REAL_ROS") != nullptr;
+	static bool s_fabricatedSc = getenv("VMP_REAL_SC") == nullptr;
 
-	if (s_realRos)
+	if (s_fabricatedSc)
 	{
 		return false;
 	}

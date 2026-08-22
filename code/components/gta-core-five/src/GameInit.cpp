@@ -165,16 +165,19 @@ void WaitForRlInit()
 {
 	assert(g_isScWaitingForInit);
 
-	// VMP: with a fabricated SC session (legitimacy component, VMP_REAL_ROS)
-	// the game's SC-waiting flag never clears, so bound the servicing loop and
-	// continue instead of fatal-erroring after 60s.
-	static bool s_realRos = getenv("VMP_REAL_ROS") != nullptr;
+	// VMP: with a fabricated SC session (legitimacy component, stub SDK arm -
+	// i.e. VMP_REAL_SC NOT set) the game's SC-waiting flag never clears, so
+	// bound the servicing loop and continue instead of fatal-erroring after
+	// 60s. With the real SDK (VMP_REAL_SC=1) we must genuinely wait: the real
+	// session object is only created once SDK init completes (~40s on a slow
+	// machine), and racing past it crashes the load on a null session.
+	static bool s_fabricatedSc = getenv("VMP_REAL_SC") == nullptr;
 
 	auto waitForRlInitStart = GetTickCount64();
 
 	while (g_isScWaitingForInit())
 	{
-		if (s_realRos && (GetTickCount64() - waitForRlInitStart) > 5000)
+		if (s_fabricatedSc && (GetTickCount64() - waitForRlInitStart) > 5000)
 		{
 			trace("WaitForRlInit: continuing anyway (scWaitingForInit=%d, fabricated SC session)\n", g_isScWaitingForInit());
 			break;
