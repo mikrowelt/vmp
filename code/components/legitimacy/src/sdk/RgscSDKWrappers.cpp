@@ -1007,4 +1007,17 @@ static HookFunction hookFunction([] ()
 
 	trace("legitimacy: GetProcAddress IAT hook %s (original=%p)\n",
 		origGpa ? "installed" : "FAILED - no IAT entry patched", (void*)origGpa);
+
+	// GTA5's SC state machine parks on a modal error screen (MO_SC_ERR_*) when
+	// the SC manager's session field stays null - which it always does with a
+	// fabricated SC session, since the real SDK never initializes. Force the
+	// leaf check ([mgr+58h] != 0) to report a live session so the game proceeds.
+	// b3570: 33 C0 48 39 41 58 0F 95 C0 C3 == xor eax,eax; cmp [rcx+58h],rax; setne al; ret
+	auto scCheck = hook::get_pattern("33 C0 48 39 41 58 0F 95 C0 C3");
+
+	hook::put<uint8_t>(scCheck, 0xB0);     // mov al, 1
+	hook::put<uint8_t>((uintptr_t)scCheck + 1, 0x01);
+	hook::put<uint8_t>((uintptr_t)scCheck + 2, 0xC3); // ret
+
+	trace("legitimacy: forced SC session-alive check at %p\n", scCheck);
 });
