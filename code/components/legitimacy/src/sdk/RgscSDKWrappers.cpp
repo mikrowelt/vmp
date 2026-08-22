@@ -1000,25 +1000,6 @@ FARPROC _stdcall GetProcAddressStub(HMODULE hModule, LPCSTR name)
 	return GetProcAddress(hModule, name);
 }
 
-// Fake SC session object handed out by the hooked session-object getter.
-// Every vtable slot reports "unavailable" (0), which all known call sites
-// treat as a graceful skip.
-static int ScFakeSlotRet0()
-{
-	return 0;
-}
-
-static void* g_scFakeVtbl[64];
-static void* g_scFakeObject = g_scFakeVtbl;
-
-using GetScSession_t = void* (*)(void* mgr);
-static GetScSession_t g_origGetScSession;
-
-static void* GetScSessionStub(void* mgr)
-{
-	return &g_scFakeObject;
-}
-
 static HookFunction hookFunction([] ()
 {
 	trace("legitimacy: installing GetProcAddress IAT hook (exe base=%p, baseDiff=%p)\n",
@@ -1068,23 +1049,30 @@ static HookFunction hookFunction([] ()
 
 		trace("legitimacy: stubbed SC capability query at %p\n", scCap);
 
-		// The SC manager's session-object getter (mov rax,[rcx+60h]; ret)
-		// returns null without a real session, and multiple game sites then
-		// dereference it (call [obj+8] etc.). Return a fake object whose every
-		// vtable slot reports "unavailable" (0) instead.
-		for (auto& slot : g_scFakeVtbl)
-		{
-			slot = (void*)&ScFakeSlotRet0;
-		}
+		// Null-guard the two known sites that dereference the SC session
+		// sub-object (null without a real session).
+		//
+		// Site 1 (GTA5_b3570.exe+1E18CC, nevada-batman-romeo): NOP the deref +
+		// virtual call; rax is 0 so the existing test al,al / je takes the
+		// graceful skip path.
+		auto scSite1 = hook::get_pattern("48 8B C8 48 8B 10 FF 52 08 84 C0 74 40");
 
-		MH_Initialize();
+		hook::nop((uintptr_t)scSite1 + 3, 6);
 
-		// 48 83 C4 20 5F C3 == preceding function tail (for uniqueness)
-		auto getter = hook::get_pattern("48 83 C4 20 5F C3 48 8B 41 60 C3", 6);
+		trace("legitimacy: null-guarded SC session use site 1 at %p\n", scSite1);
 
-		MH_CreateHook(getter, &GetScSessionStub, (void**)&g_origGetScSession);
-		MH_EnableHook(MH_ALL_HOOKS);
+		// Site 2 (CPlantMgr INIT_CORE, c0000005 at +0x124459C): skip the whole
+		// deref+use block when the getter returns null.
+		auto scSite2 = hook::get_pattern("E8 ? ? ? ? 48 8B CE 48 8B 38 48 8B D8 E8 ? ? ? ? 8A D0 48 8B CB FF 57 60");
 
-		trace("legitimacy: hooked SC session-object getter at %p\n", getter);
+		// test rax,rax; je +0x11 (-> past the block); nop fill
+		hook::put<uint8_t>((uintptr_t)scSite2 + 5, 0x48);
+		hook::put<uint8_t>((uintptr_t)scSite2 + 6, 0x85);
+		hook::put<uint8_t>((uintptr_t)scSite2 + 7, 0xC0);
+		hook::put<uint8_t>((uintptr_t)scSite2 + 8, 0x74);
+		hook::put<uint8_t>((uintptr_t)scSite2 + 9, 0x11);
+		hook::nop((uintptr_t)scSite2 + 10, 17);
+
+		trace("legitimacy: null-guarded SC session use site 2 at %p\n", scSite2);
 	}
 });
