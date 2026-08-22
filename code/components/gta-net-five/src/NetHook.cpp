@@ -1422,7 +1422,7 @@ static void EnsureRlineManagerInit()
 	// method-table registration: push rbx; sub rsp,20h; lea rbx,[mgr]; ... movabs rdx,4EDE34FBADD967A6h
 	auto regLoc = hook::get_pattern("40 53 48 83 EC 20 48 8D 1D ? ? ? ? 4C 8D 05 ? ? ? ? 48 BA A6 67 D9 AD FB 34 DE 4E");
 
-	trace("gta:net: running rline manager init (mgr=%p init=%p reg=%p)\n", mgr, initLoc, regLoc);
+	trace("gta:net: running rline manager init (mgr=%p init=%p reg=%p)\n", (void*)mgr, (void*)initLoc, (void*)regLoc);
 
 	((void(*)())initLoc)();
 	((void(*)())regLoc)();
