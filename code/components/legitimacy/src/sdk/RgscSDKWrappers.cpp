@@ -1,6 +1,8 @@
 #include <StdInc.h>
 #include <Hooking.h>
 
+#include <MinHook.h>
+
 #include <botan/base64.h>
 
 #include <ICoreGameInit.h>
@@ -998,11 +1000,29 @@ FARPROC _stdcall GetProcAddressStub(HMODULE hModule, LPCSTR name)
 	return GetProcAddress(hModule, name);
 }
 
+// Fake SC session object handed out by the hooked session-object getter.
+// Every vtable slot reports "unavailable" (0), which all known call sites
+// treat as a graceful skip.
+static int ScFakeSlotRet0()
+{
+	return 0;
+}
+
+static void* g_scFakeVtbl[64];
+static void* g_scFakeObject = g_scFakeVtbl;
+
+using GetScSession_t = void* (*)(void* mgr);
+static GetScSession_t g_origGetScSession;
+
+static void* GetScSessionStub(void* mgr)
+{
+	return &g_scFakeObject;
+}
+
 static HookFunction hookFunction([] ()
 {
 	trace("legitimacy: installing GetProcAddress IAT hook (exe base=%p, baseDiff=%p)\n",
 		(void*)GetModuleHandle(nullptr), (void*)hook::baseAddressDifference);
-
 	auto origGpa = hook::iat("kernel32.dll", GetProcAddressStub, "GetProcAddress");
 
 	trace("legitimacy: GetProcAddress IAT hook %s (original=%p)\n",
@@ -1047,5 +1067,24 @@ static HookFunction hookFunction([] ()
 		hook::nop((uintptr_t)scCap + 4, 7);
 
 		trace("legitimacy: stubbed SC capability query at %p\n", scCap);
+
+		// The SC manager's session-object getter (mov rax,[rcx+60h]; ret)
+		// returns null without a real session, and multiple game sites then
+		// dereference it (call [obj+8] etc.). Return a fake object whose every
+		// vtable slot reports "unavailable" (0) instead.
+		for (auto& slot : g_scFakeVtbl)
+		{
+			slot = (void*)&ScFakeSlotRet0;
+		}
+
+		MH_Initialize();
+
+		// 48 83 C4 20 5F C3 == preceding function tail (for uniqueness)
+		auto getter = hook::get_pattern("48 83 C4 20 5F C3 48 8B 41 60 C3", 6);
+
+		MH_CreateHook(getter, &GetScSessionStub, (void**)&g_origGetScSession);
+		MH_EnableHook(MH_ALL_HOOKS);
+
+		trace("legitimacy: hooked SC session-object getter at %p\n", getter);
 	}
 });
