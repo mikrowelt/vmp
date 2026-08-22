@@ -190,10 +190,10 @@ bool SaveOwnershipTicket(const std::string& guid)
 	return true;
 }
 
-#include <steam/steam_api.h>
+#include "SteamFlat.h"
 
 // GTA V Steam appid
-constexpr AppId_t kGTAVAppId = 271590;
+constexpr uint32_t kGTAVAppId = 271590;
 
 static bool VerifySteamOwnershipInternal(std::string* outSource)
 {
@@ -217,9 +217,9 @@ static bool VerifySteamOwnershipInternal(std::string* outSource)
 			fclose(f);
 		}
 
-		if (!SteamAPI_Init())
+		if (!steamflat::Init())
 		{
-			trace("%s: SteamAPI_Init failed (Steam not running/signed in?)\n", __func__);
+			trace("%s: Steam API init failed (Steam not running/signed in?)\n", __func__);
 			return false;
 		}
 	}
@@ -228,31 +228,23 @@ static bool VerifySteamOwnershipInternal(std::string* outSource)
 	{
 		~shutdown()
 		{
-			SteamAPI_Shutdown();
+			steamflat::Shutdown();
 		}
 	} shutdown;
 
-	if (!SteamApps())
-	{
-		trace("%s: no ISteamApps interface\n", __func__);
-		return false;
-	}
-
 	// local subscription check
-	if (!SteamApps()->BIsSubscribedApp(kGTAVAppId))
+	if (!steamflat::IsSubscribedApp(kGTAVAppId))
 	{
 		trace("%s: BIsSubscribedApp(%d) is false\n", __func__, kGTAVAppId);
 		return false;
 	}
 
-	// verify the license owner matches the current user (family sharing lends,
-	// but still proves *some* ownership relationship; accept either way but log)
-	auto owner = SteamApps()->GetAppOwner();
-	auto self = SteamUser()->GetSteamID();
+	auto owner = steamflat::GetAppOwner();
+	auto self = steamflat::GetSteamId();
 
-	trace("%s: GTA V owned via Steam (owner %lld, user %lld)\n", __func__, owner.ConvertToUint64(), self.ConvertToUint64());
+	trace("%s: GTA V owned via Steam (owner %lld, user %lld)\n", __func__, owner, self);
 
-	*outSource = fmt::sprintf("steam:%lld", self.ConvertToUint64());
+	*outSource = fmt::sprintf("steam:%lld", self);
 
 	return true;
 }

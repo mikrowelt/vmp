@@ -1,14 +1,4 @@
 return function()
-	filter {}
-
-	-- Steam SDK import library (vendored in this component)
-	filter 'architecture:x86'
-		libdirs { "components/legitimacy/lib/" }
-		links { "steam_api" }
-
-	filter 'architecture:x64'
-		libdirs { "components/legitimacy/lib/" }
-		links { "steam_api64" }
-
-	filter {}
+	-- steam_api64.dll is bound dynamically at runtime (flat API), no import
+	-- library is required
 end

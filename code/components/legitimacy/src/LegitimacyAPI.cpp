@@ -16,12 +16,12 @@
 
 #include <SharedLegitimacyAPI.h>
 
-#include <steam/steam_api.h>
-
 #include <Error.h>
 
+#include "SteamFlat.h"
+
 // GTA V Steam appid
-constexpr AppId_t kGTAVAppId = 271590;
+constexpr uint32_t kGTAVAppId = 271590;
 
 static bool g_steamInitAttempted = false;
 static bool g_steamInitialized = false;
@@ -50,9 +50,9 @@ static void EnsureSteamInit()
 		}
 	}
 
-	g_steamInitialized = SteamAPI_Init();
+	g_steamInitialized = steamflat::Init();
 
-	trace("%s: SteamAPI_Init -> %d\n", __func__, g_steamInitialized);
+	trace("%s: steam init -> %d\n", __func__, g_steamInitialized);
 }
 
 namespace cfx::legitimacy
@@ -86,7 +86,7 @@ void InitSteamSDKConnection()
 
 bool IsSteamRunning()
 {
-	return SteamAPI_IsSteamRunning();
+	return steamflat::IsSteamRunning();
 }
 
 bool IsSteamInitializedWrapper()
@@ -94,26 +94,6 @@ bool IsSteamInitializedWrapper()
 	EnsureSteamInit();
 
 	return g_steamInitialized;
-}
-
-static void ToHex(const unsigned char* in, size_t insz, char* out, size_t outsz)
-{
-	const unsigned char* pin = in;
-	const char* hex = "0123456789abcdef";
-	char* pout = out;
-
-	for (; pin < in + insz; pout += 2, pin++)
-	{
-		pout[0] = hex[(*pin >> 4) & 0xF];
-		pout[1] = hex[*pin & 0xF];
-
-		if (pout + 3 - out > outsz)
-		{
-			break;
-		}
-	}
-
-	pout[0] = 0;
 }
 
 void GetSteamAuthTicketWrapper(const std::function<void(std::pair<std::string, std::string>)>& callback, bool enforceSteamAuth)
@@ -126,22 +106,14 @@ void GetSteamAuthTicketWrapper(const std::function<void(std::pair<std::string, s
 		return;
 	}
 
-	static uint8_t ticket[16384] = { 0 };
-	uint32_t ticketLength = 0;
+	auto ticket = steamflat::GetAuthSessionTicketHex();
 
-	SteamUser()->GetAuthSessionTicket(ticket, sizeof(ticket), &ticketLength);
-
-	if (ticketLength == 0)
+	if (ticket.empty())
 	{
 		trace("%s: GetAuthSessionTicket returned an empty ticket\n", __func__);
-		callback({ "", "" });
-		return;
 	}
 
-	static char outHex[16384 * 2];
-	ToHex(ticket, ticketLength, outHex, sizeof(outHex));
-
-	callback({ "", outHex });
+	callback({ "", ticket });
 }
 
 uint64_t GetSteamIdAsIntWrapper()
@@ -153,7 +125,7 @@ uint64_t GetSteamIdAsIntWrapper()
 		return 0;
 	}
 
-	return SteamUser()->GetSteamID().ConvertToUint64();
+	return steamflat::GetSteamId();
 }
 
 std::string GetSteamUsernameWrapper()
@@ -165,9 +137,7 @@ std::string GetSteamUsernameWrapper()
 		return "";
 	}
 
-	const char* name = SteamFriends()->GetPersonaName();
-
-	return name ? name : "";
+	return steamflat::GetPersonaName();
 }
 
 void SetSteamRichPresenceWrapper(std::string key, std::string value)
@@ -179,7 +149,7 @@ void SetSteamRichPresenceWrapper(std::string key, std::string value)
 		return;
 	}
 
-	SteamFriends()->SetRichPresence(key.c_str(), value.c_str());
+	steamflat::SetRichPresence(key.c_str(), value.c_str());
 }
 
 void ResetSteamRichPresenceWrapper()
@@ -191,7 +161,7 @@ void ResetSteamRichPresenceWrapper()
 		return;
 	}
 
-	SteamFriends()->ClearRichPresence();
+	steamflat::ClearRichPresence();
 }
 
 bool SetSteamAppId(bool legacy)
