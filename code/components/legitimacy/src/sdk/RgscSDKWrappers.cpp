@@ -1075,20 +1075,29 @@ static HookFunction hookFunction([] ()
 		// dereference the result (GTA5_b3570.exe+1E18CC nevada-batman-romeo,
 		// +AA3AAF floor-nitrogen-spring). Hand out a fake object whose every
 		// vtable slot reports "unavailable" (0) - callers skip gracefully.
-		for (auto& slot : g_scFakeVtbl)
+		// Only with the stub SDK: when VMP_REAL_SC=1 the real SDK creates a
+		// genuine session object and the game must see THAT.
+		if (getenv("VMP_REAL_SC") == nullptr)
 		{
-			slot = (void*)&ScFakeSlotRet0;
+			for (auto& slot : g_scFakeVtbl)
+			{
+				slot = (void*)&ScFakeSlotRet0;
+			}
+
+			MH_Initialize();
+
+			// 48 83 C4 20 5F C3 == preceding function tail (for uniqueness)
+			auto getter = hook::get_pattern("48 83 C4 20 5F C3 48 8B 41 60 C3", 6);
+
+			MH_CreateHook(getter, &GetScSessionStub, (void**)&g_origGetScSession);
+			MH_EnableHook(MH_ALL_HOOKS);
+
+			trace("legitimacy: hooked SC session-object getter at %p\n", getter);
 		}
-
-		MH_Initialize();
-
-		// 48 83 C4 20 5F C3 == preceding function tail (for uniqueness)
-		auto getter = hook::get_pattern("48 83 C4 20 5F C3 48 8B 41 60 C3", 6);
-
-		MH_CreateHook(getter, &GetScSessionStub, (void**)&g_origGetScSession);
-		MH_EnableHook(MH_ALL_HOOKS);
-
-		trace("legitimacy: hooked SC session-object getter at %p\n", getter);
+		else
+		{
+			trace("legitimacy: VMP_REAL_SC=1, not faking SC session object\n");
+		}
 
 		// Null-guard for the CPlantMgr INIT_CORE path (c0000005 at +0x124459C):
 		// a *different* manager field getter ([rcx+80h]) also returns null;
