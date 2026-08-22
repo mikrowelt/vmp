@@ -1113,5 +1113,15 @@ static HookFunction hookFunction([] ()
 		hook::nop((uintptr_t)scSite2 + 10, 17);
 
 		trace("legitimacy: null-guarded SC session use site 2 at %p\n", scSite2);
+
+		// Site 1 (GTA5_b3570.exe+1E18CC, nevada-batman-romeo): NOP the
+		// deref + capability virtual. Null session -> al=0 -> existing je
+		// skips; real session -> al!=0 -> falls through to the session-exists
+		// continuation. Correct for both SC arms.
+		auto scSite1 = hook::get_pattern("48 8B C8 48 8B 10 FF 52 08 84 C0 74 40");
+
+		hook::nop((uintptr_t)scSite1 + 3, 6);
+
+		trace("legitimacy: null-guarded SC session use site 1 at %p\n", scSite1);
 	}
 });
