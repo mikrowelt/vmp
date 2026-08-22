@@ -1036,7 +1036,8 @@ static HookFunction hookFunction([] ()
 		// touching the bytes gta-core-five pattern-scans (patch ends before the
 		// FF 52 08 site).
 		// E8..(call getter) 48 8B C8 (mov rcx,rax) 48 8B 10 (mov rdx,[rax]) ...
-		auto scCap = hook::get_pattern("E8 ? ? ? ? 48 8B C8 48 8B 10 FF 52 08");
+		// (full tail needed for uniqueness - the short form also matches at +0x6D3D)
+		auto scCap = hook::get_pattern("E8 ? ? ? ? 48 8B C8 48 8B 10 FF 52 08 84 C0 74 04 B0 01 EB 02 32 C0 48 83 C4 28 C3");
 
 		// xor eax,eax; jmp +0x14 (-> xor al,al; add rsp,28; ret); nop fill
 		hook::put<uint8_t>(scCap, 0x31);
