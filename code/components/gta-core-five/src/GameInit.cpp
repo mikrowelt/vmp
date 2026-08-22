@@ -165,10 +165,21 @@ void WaitForRlInit()
 {
 	assert(g_isScWaitingForInit);
 
+	// VMP: with a fabricated SC session (legitimacy component, VMP_REAL_ROS)
+	// the game's SC-waiting flag never clears, so bound the servicing loop and
+	// continue instead of fatal-erroring after 60s.
+	static bool s_realRos = getenv("VMP_REAL_ROS") != nullptr;
+
 	auto waitForRlInitStart = GetTickCount64();
 
 	while (g_isScWaitingForInit())
 	{
+		if (s_realRos && (GetTickCount64() - waitForRlInitStart) > 5000)
+		{
+			trace("WaitForRlInit: continuing anyway (scWaitingForInit=%d, fabricated SC session)\n", g_isScWaitingForInit());
+			break;
+		}
+
 		// if stuck waiting for over a minute, likely this errored out
 		if ((GetTickCount64() - waitForRlInitStart) > 60000)
 		{

@@ -402,6 +402,21 @@ using networkBail_1604 = void((*)(int, int, int, int, bool));
 
 static bool(*_isScWaitingForInit)();
 
+// VMP: with a fabricated SC session (legitimacy component, VMP_REAL_ROS) the
+// game's SC-waiting flag never clears, which would wedge the host state
+// machine at HS_LOADED forever. Report not-waiting in that configuration.
+static bool IsScWaitingForInit()
+{
+	static bool s_realRos = getenv("VMP_REAL_ROS") != nullptr;
+
+	if (s_realRos)
+	{
+		return false;
+	}
+
+	return _isScWaitingForInit();
+}
+
 #include <HostSystem.h>
 
 #include <ResourceManager.h>
@@ -452,7 +467,7 @@ struct
 
 		if (state == HS_LOADED)
 		{
-			if (_isScWaitingForInit())
+			if (IsScWaitingForInit())
 			{
 				return;
 			}
