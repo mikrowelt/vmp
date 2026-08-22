@@ -1385,8 +1385,55 @@ static void WINAPI ExitProcessReplacement(UINT exitCode)
 
 static void(*_origLoadMeta)(const char*, bool, uint32_t);
 
+// VMP: with a fabricated SC session the game skips rline init entirely,
+// leaving the rline service manager struct (size 0x800) zeroed; the load-meta
+// path then dereferences it (GTA5_b3570.exe+AA3AAF, floor-nitrogen-spring).
+// Run the manager's own init (memset + method-table registration) once,
+// right before the first load-meta - game systems are up by then.
+static void EnsureRlineManagerInit()
+{
+	static bool s_done = false;
+
+	if (s_done)
+	{
+		return;
+	}
+
+	s_done = true;
+
+	wchar_t exePath[MAX_PATH];
+	GetModuleFileNameW(nullptr, exePath, MAX_PATH);
+
+	if (wcsstr(exePath, L"_b3570_") == nullptr)
+	{
+		return;
+	}
+
+	// manager struct init: xor eax,eax; lea rcx,[mgr]; xor edx,edx; mov r8d,800h; ...
+	auto initLoc = hook::get_pattern("33 C0 48 8D 0D ? ? ? ? 33 D2 41 B8 00 08 00 00 88 05");
+	uint64_t* mgr = hook::get_address<uint64_t*>(initLoc, 5, 9);
+
+	if (*mgr != 0)
+	{
+		trace("gta:net: rline manager already initialized (%p)\n", (void*)*mgr);
+		return;
+	}
+
+	// method-table registration: push rbx; sub rsp,20h; lea rbx,[mgr]; ... movabs rdx,4EDE34FBADD967A6h
+	auto regLoc = hook::get_pattern("40 53 48 83 EC 20 48 8D 1D ? ? ? ? 4C 8D 05 ? ? ? ? 48 BA A6 67 D9 AD FB 34 DE 4E");
+
+	trace("gta:net: running rline manager init (mgr=%p init=%p reg=%p)\n", mgr, initLoc, regLoc);
+
+	((void(*)())initLoc)();
+	((void(*)())regLoc)();
+
+	trace("gta:net: rline manager init done (mgr[0]=%p)\n", (void*)*mgr);
+}
+
 static void WaitForScAndLoadMeta(const char* fn, bool a2, uint32_t a3)
 {
+	EnsureRlineManagerInit();
+
 	WaitForRlInit();
 
 	return _origLoadMeta(fn, a2, a3);
