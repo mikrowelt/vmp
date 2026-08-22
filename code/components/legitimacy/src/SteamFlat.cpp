@@ -107,6 +107,15 @@ namespace steamflat
 			return false;
 		}
 
+		// do not report a successful init when Steam is not actually running:
+		// glue's watchdog fatals the game if init succeeded but Steam later
+		// appears to have exited
+		if (!p_SteamAPI_IsSteamRunning())
+		{
+			trace("steamflat: Steam is not running\n");
+			return false;
+		}
+
 		// empty version string: skip interface version check
 		g_steamInitialized = p_SteamInternal_SteamAPI_Init("", nullptr);
 
