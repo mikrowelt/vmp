@@ -980,6 +980,8 @@ FARPROC _stdcall GetProcAddressStub(HMODULE hModule, LPCSTR name)
 {
 	if (name == MAKEINTRESOURCEA(1) && hModule == GetModuleHandle(L"socialclub.dll"))
 	{
+		trace("GetProcAddressStub: intercepting socialclub.dll ordinal 1\n");
+
 		// VMP: with VMP_REAL_SC=1 the game gets the genuine Rockstar SC SDK
 		// factory - no RgscStub, no fabricated sign-in. Use on machines with a
 		// real signed-in Rockstar Games Launcher session.
@@ -998,5 +1000,11 @@ FARPROC _stdcall GetProcAddressStub(HMODULE hModule, LPCSTR name)
 
 static HookFunction hookFunction([] ()
 {
-	hook::iat("kernel32.dll", GetProcAddressStub, "GetProcAddress");
+	trace("legitimacy: installing GetProcAddress IAT hook (exe base=%p, baseDiff=%p)\n",
+		GetModuleHandle(nullptr), (void*)hook::baseAddressDifference);
+
+	auto origGpa = hook::iat("kernel32.dll", GetProcAddressStub, "GetProcAddress");
+
+	trace("legitimacy: GetProcAddress IAT hook %s (original=%p)\n",
+		origGpa ? "installed" : "FAILED - no IAT entry patched", (void*)origGpa);
 });
