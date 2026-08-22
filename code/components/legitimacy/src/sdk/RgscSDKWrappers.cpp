@@ -1002,13 +1002,15 @@ FARPROC _stdcall GetProcAddressStub(HMODULE hModule, LPCSTR name)
 
 // Fake SC session object handed out by the hooked session-object getter
 // (SC manager [rcx+60h]). Every vtable slot reports "unavailable" (0/false),
-// which the known call sites treat as a graceful skip.
+// which the known call sites treat as a graceful skip. The table is
+// deliberately oversized: some sites call high slots (>= 64), and running off
+// the end means executing adjacent .data (legitimacy.dll+0x944c8 crash).
 static int ScFakeSlotRet0()
 {
 	return 0;
 }
 
-static void* g_scFakeVtbl[64];
+static void* g_scFakeVtbl[1024];
 static void* g_scFakeObject = g_scFakeVtbl;
 
 using GetScSession_t = void* (*)(void* mgr);
