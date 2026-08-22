@@ -2048,11 +2048,25 @@ inline void NopAndSetCall(TFn* fn, T loc)
 static HookFunction hookFunction2([]()
 {
 #ifdef GTA_FIVE
-	auto loc = hook::get_pattern<char>("33 C9 E8 ? ? ? ? 41 8B CE E8 ? ? ? ? 41", 10);
-	NopAndSetCall(&g_origRlineInit, loc);
-	NopAndSetCall(&g_origCloudInit, loc + 8);
-	NopAndSetCall(&g_origTextureInit, hook::get_pattern("C7 45 38 99 3B 6D F6", 19));
+	// VMP: these patterns are from the legacy fused image; on the 2026-03
+	// image they may not match. Apply all-or-nothing, never assert-crash.
+	auto rlinePat = hook::pattern("33 C9 E8 ? ? ? ? 41 8B CE E8 ? ? ? ? 41");
+	auto texturePat = hook::pattern("C7 45 38 99 3B 6D F6");
+	auto callPat = hook::pattern("8D 4A 03 E8 ? ? ? ? E8 ? ? ? ? 84 C0 75");
 
-	hook::call(hook::get_pattern("8D 4A 03 E8 ? ? ? ? E8 ? ? ? ? 84 C0 75", 8), InitRlineWrap);
+	if (rlinePat.count_hint(1).size() == 1 && texturePat.count_hint(1).size() == 1 && callPat.count_hint(1).size() == 1)
+	{
+		auto loc = rlinePat.get(0).get<char>(10);
+		NopAndSetCall(&g_origRlineInit, loc);
+		NopAndSetCall(&g_origCloudInit, loc + 8);
+		NopAndSetCall(&g_origTextureInit, texturePat.get(0).get<char>(19));
+
+		hook::call(callPat.get(0).get<char>(8), InitRlineWrap);
+	}
+	else
+	{
+		trace("legitimacy: rline/cloud/texture init patterns not found on this game image, skipping init hijack (rline=%zu texture=%zu call=%zu)\n",
+			rlinePat.size(), texturePat.size(), callPat.size());
+	}
 #endif
 });
