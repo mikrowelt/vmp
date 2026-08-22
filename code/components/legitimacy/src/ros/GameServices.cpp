@@ -393,7 +393,7 @@ void GameServicesHandler::SendResponse(fwRefContainer<net::HttpRequest> request,
 		hmac->update(0);
 
 		// HTTP status code (200)
-		hmac->update_be(200);
+		hmac->update_be(static_cast<uint32_t>(200));
 		hmac->update(0);
 
 		// challenge
