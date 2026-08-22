@@ -1001,17 +1001,18 @@ FARPROC _stdcall GetProcAddressStub(HMODULE hModule, LPCSTR name)
 }
 
 // Fake SC session object handed out by the hooked session-object getter
-// (SC manager [rcx+60h]). Every vtable slot reports "unavailable" (0/false),
-// which the known call sites treat as a graceful skip. The table is
-// deliberately oversized: some sites call high slots (>= 64), and running off
-// the end means executing adjacent .data (legitimacy.dll+0x944c8 crash).
-static int ScFakeSlotRet0()
-{
-	return 0;
-}
-
+// (SC manager [rcx+60h]). Every vtable slot returns the fake object itself:
+// sites that treat a result as a nested object then keep landing on fake
+// objects (returning 0 got dereferenced as an object pointer - wild jump into
+// legitimacy.dll data). The table is deliberately oversized: some sites call
+// high slots (>= 64).
 static void* g_scFakeVtbl[1024];
 static void* g_scFakeObject = g_scFakeVtbl;
+
+static void* ScFakeSlotRetSelf()
+{
+	return &g_scFakeObject;
+}
 
 using GetScSession_t = void* (*)(void* mgr);
 static GetScSession_t g_origGetScSession;
@@ -1081,7 +1082,7 @@ static HookFunction hookFunction([] ()
 		{
 			for (auto& slot : g_scFakeVtbl)
 			{
-				slot = (void*)&ScFakeSlotRet0;
+				slot = (void*)&ScFakeSlotRetSelf;
 			}
 
 			MH_Initialize();
